@@ -1,31 +1,51 @@
 {
   "id": "level_storyteller_01",
-  "title": "Tout le monde rejette Edgar",
+  "title": "3 présidents destitués",
   "cells": 6,
   "cardsCaracter": [
-    { "id": "edgar", "label": "Edgar", "type": "character" },
-    { "id": "lenora", "label": "Lenora", "type": "character" },
-    { "id": "isobel", "label": "Isobel", "type": "character" },
-    { "id": "bernard", "label": "Bernard", "type": "character" }
+    { "id": "macron", "label": "Macron", "type": "character" },
+    { "id": "melenchon", "label": "Mélenchon", "type": "character" },
+    { "id": "lepen", "label": "Le Pen", "type": "character" }
   ],
   "cardsPlace": [
     {
-      "id": "eglise",
-      "label": "Église",
+      "id": "eviction",
+      "label": "Eviction",
       "type": "location",
-       "positions": ["left", "right"],
       "slots": {
-        "maxCharacters": 2
+        "positions": ["left", "right"],
+        "maxCharacters": 2,
+        "rules": "Le personnage à gauche doit être plus populaire que celui à droite pour réussir la destitution"
       }
     },
     {
-      "id": "tombe",
-      "label": "Tombe",
+      "id": "popularite",
+      "label": "Popularité",
       "type": "location",
-      "positions": ["left", "right"],
       "slots": {
-        "maxCharacters": 2
+        "maxCharacters": 1,
+        "rules": "Détermine quel personnage peut destituer le président actuel"
       }
+    }
+  ],
+  "sequence_destitution": [
+    {
+      "destiteur": "melenchon",
+      "destitué": "macron",
+      "resultat": "Macron est destitué, Mélenchon devient président",
+      "popularite_necessaire": "Mélenchon > Macron"
+    },
+    {
+      "destiteur": "lepen",
+      "destitué": "melenchon",
+      "resultat": "Mélenchon est destitué, Le Pen devient présidente",
+      "popularite_necessaire": "Le Pen > Mélenchon"
+    },
+    {
+      "destiteur": "macron",
+      "destitué": "lepen",
+      "resultat": "Le Pen est destituée, Macron devient président",
+      "popularite_necessaire": "Macron > Le Pen"
     }
   ]
 }

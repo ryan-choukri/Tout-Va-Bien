@@ -104,12 +104,11 @@ export default function GameGrid() {
   cardId: string, 
   targetCellId: string, 
   sourceCellId?: string,
-  targetPosition?: "left" | "right",
+  targetPosition?: "left" | "right"
 ) {
   const cardType = getCardType(cardId);
 
   setBoardState((prevBoard) => {
-    // Deep clone to avoid mutation issues
     const updatedBoard: BoardState = JSON.parse(JSON.stringify(prevBoard));
 
     // ─────────────────────────────────────────────
@@ -119,7 +118,6 @@ export default function GameGrid() {
       const sourceCell = updatedBoard[sourceCellId];
       const sourceCharacters = sourceCell?.characters || [];
 
-      // Remove source cell entirely
       delete updatedBoard[sourceCellId];
 
       const locationCard = getCardDetails(cardId) as Card;
@@ -157,92 +155,53 @@ export default function GameGrid() {
     // CHARACTER LOGIC
     // ─────────────────────────────────────────────
     if (cardType === "character") {
-      // Check if target cell has a location
-      if (!updatedBoard[targetCellId]?.location) {
-        console.log("⛔ No location in target cell");
-        return updatedBoard;
-      }
+      // No location in target cell: do nothing
+      if (!updatedBoard[targetCellId]?.location) return updatedBoard;
 
       const locationCard = getCardDetails(updatedBoard[targetCellId].location) as Card;
       const maxCharacters = locationCard?.slots?.maxCharacters || 99;
       const hasPositions = !!locationCard?.slots?.positions?.length;
 
-      // ─────────────────────────────────────────────
-      // CASE 1: Moving within SAME CELL (changing position)
-      // ─────────────────────────────────────────────
-      if (sourceCellId === targetCellId && hasPositions && targetPosition) {
-        // Remove character being moved
-        let newCharacters = updatedBoard[targetCellId].characters.filter(
-          char => char.id !== cardId
-        );
-
-        // Remove any character already in target position
-        newCharacters = newCharacters.filter(
-          char => char.position !== targetPosition
-        );
-
-        // Add character at new position
-        newCharacters.push({ id: cardId, position: targetPosition });
-
-        updatedBoard[targetCellId].characters = newCharacters;
-
-        return updatedBoard;
-      }
-
-      // ─────────────────────────────────────────────
-      // CASE 2: Moving from DIFFERENT CELL or DECK
-      // ─────────────────────────────────────────────
-      
-      // Step 1: Remove from source cell if exists
+      // Remove from source cell if needed
       if (sourceCellId && updatedBoard[sourceCellId]) {
         updatedBoard[sourceCellId].characters = updatedBoard[sourceCellId].characters.filter(
           char => char.id !== cardId
         );
-
-        // Clean up empty source cell
-        if (!updatedBoard[sourceCellId].location && updatedBoard[sourceCellId].characters.length === 0) {
+        if (
+          !updatedBoard[sourceCellId].location &&
+          updatedBoard[sourceCellId].characters.length === 0
+        ) {
           delete updatedBoard[sourceCellId];
         }
       }
 
-      // Step 2: Add to target cell
       if (hasPositions) {
-        // With positions (left/right)
-        let newCharacters = [...updatedBoard[targetCellId].characters];
-
-        // Determine final position
-        let finalPosition: "left" | "right";
-
-        if (targetPosition) {
-          // Dropped on specific position - remove existing character there
-          newCharacters = newCharacters.filter(char => char.position !== targetPosition);
-          finalPosition = targetPosition;
-        } else {
-          // Auto-assign position
-          const occupiedPositions = newCharacters.map(c => c.position);
-          if (!occupiedPositions.includes("left")) {
-            finalPosition = "left";
-          } else if (!occupiedPositions.includes("right")) {
-            finalPosition = "right";
-          } else {
-            // No free position
-            return updatedBoard;
-          }
+        // 🔑 POUR LES LOCATIONS AVEC POSITIONS: ON DOIT AVOIR UNE POSITION SPÉCIFIQUE
+        if (!targetPosition) {
+          // Si pas de position spécifique (drop sur la location générale), ne rien faire
+          console.log("❌ Location has positions, but no specific position targeted");
+          return updatedBoard;
         }
 
-        newCharacters.push({ id: cardId, position: finalPosition });
+        // Remove any character in the target position AND the dragged character
+        const newCharacters = updatedBoard[targetCellId].characters.filter(
+          char => char.position !== targetPosition && char.id !== cardId
+        );
+
+        // Add the character at the specified position ONLY
+        newCharacters.push({ id: cardId, position: targetPosition });
         updatedBoard[targetCellId].characters = newCharacters;
-
       } else {
-        // Without positions (single slot)
-        const currentCount = updatedBoard[targetCellId].characters.length;
-
-        if (currentCount < maxCharacters) {
-          updatedBoard[targetCellId].characters.push({ id: cardId, position: undefined });
+        // No positions: allow free placement up to maxCharacters
+        let newCharacters = updatedBoard[targetCellId].characters.filter(
+          char => char.id !== cardId
+        );
+        if (newCharacters.length < maxCharacters) {
+          newCharacters.push({ id: cardId, position: undefined });
         } else {
-          // Replace existing
-          updatedBoard[targetCellId].characters = [{ id: cardId, position: undefined }];
+          newCharacters = [{ id: cardId, position: undefined }];
         }
+        updatedBoard[targetCellId].characters = newCharacters;
       }
 
       return updatedBoard;
@@ -288,6 +247,8 @@ export default function GameGrid() {
     return deckLocationCards.some(c => c.id === cardId) ? "location" : "character";
   }
 
+  console.log(boardState);
+  
   return (
     <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
       <h2 className="text-white text-lg mb-2 text-center">{level.title}</h2>
