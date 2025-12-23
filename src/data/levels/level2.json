@@ -1,0 +1,10 @@
+{
+  "id": "level2",
+  "title": "Le chevalier sauve la princesse",
+  "cells": 3,
+  "cards": [
+    { "id": "knight", "label": "Chevalier" },
+    { "id": "princess", "label": "Princesse" },
+    { "id": "dragon", "label": "Dragon" }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "level1",
+  "title": "La Reine tue le Roi par amour",
+  "cells": 6,
+  "cardsCaracter": [
+    { "id": "queen", "label": "Reine", "type": "character" },
+    { "id": "lover", "label": "Amant", "type": "character" },
+    { "id": "king", "label": "Roi", "type": "character" },
+    { "id": "valet", "label": "Valet", "type": "character" },
+    { "id": "chevalier", "label": "Chevalier", "type": "character" }
+  ],
+  "cardsPlace": [
+    { "id": "castle", "slots": { "maxCharacters": 1 },"label": "Château", "type": "location" },
+    { "id": "bedroom", "slots": { "maxCharacters": 2, "positions": ["left", "right"] },"label": "Chambre", "type": "location" },
+    { "id": "forest", "slots": { "maxCharacters": 2, "positions": ["left", "right"] },"label": "Forêt", "type": "location" },
+    { "id": "mariage", "slots": { "maxCharacters": 1 },"label": "Mariage", "type": "location" },
+    { "id": "salon", "slots": { "maxCharacters": 2, "positions": ["left", "right"] },"label": "Salon", "type": "location" },
+    { "id": "souterrain", "slots": { "maxCharacters": 2, "positions": ["left", "right"] },"label": "Souterrain", "type": "location" }
+  ]
+}
