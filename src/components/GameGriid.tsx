@@ -81,180 +81,160 @@ export default function GameGrid() {
     placeCardOnBoard(cardId, targetCellId, sourceCellId, targetPosition, draggedPosition);
   }
 
+  
   function placeCardOnBoard(
-    cardId: string, 
-    targetCellId: string, 
-    sourceCellId?: string,
-    targetPosition?: "left" | "right",
-    draggedPosition?: "left" | "right"
-  ) {
-    const cardType = getCardType(cardId);
-    
-    setBoardState((prevBoard) => {
-      const updatedBoard = { ...prevBoard };
+  cardId: string, 
+  targetCellId: string, 
+  sourceCellId?: string,
+  targetPosition?: "left" | "right",
+  draggedPosition?: "left" | "right"
+) {
+  const cardType = getCardType(cardId);
 
-      // If moving a location from one cell to another
-      if (cardType === "location" && sourceCellId && sourceCellId !== targetCellId) {
-        const sourceCell = updatedBoard[sourceCellId];
-        const sourceCharacters = sourceCell?.characters || [];
-        
-        // Remove source cell entirely
-        delete updatedBoard[sourceCellId];
-        
-        // Get target location info
-        const locationCard = getCardDetails(cardId) as Card;
-        const maxCharacters = locationCard?.slots?.maxCharacters || 99;
-        
-        // Remove existing location from target if any, but keep characters
-        const existingCharacters = updatedBoard[targetCellId]?.characters || [];
-        
-        // Combine characters, respecting max limit
-        const allCharacters = [...sourceCharacters, ...existingCharacters].slice(0, maxCharacters);
-        
-        // Create new cell with location and characters
-        updatedBoard[targetCellId] = {
-          location: cardId,
-          characters: allCharacters
-        };
-      } 
-      // If placing a character
-      else if (cardType === "character") {
-        
-        // Remove character from source cell if moving
-        if (sourceCellId && updatedBoard[sourceCellId]) {
-          updatedBoard[sourceCellId].characters = updatedBoard[sourceCellId].characters.filter(
-            (char) => char.id !== cardId
-          );
-          
-          // Clean up empty cells
-          if (!updatedBoard[sourceCellId].location && updatedBoard[sourceCellId].characters.length === 0) {
-            delete updatedBoard[sourceCellId];
-          }
-        }
+  setBoardState((prevBoard) => {
+    // Deep clone to avoid mutation issues
+    const updatedBoard: BoardState = JSON.parse(JSON.stringify(prevBoard));
 
-        // Add character to target cell if there's a location
-        if (updatedBoard[targetCellId]?.location) {
-          const locationCard = getCardDetails(updatedBoard[targetCellId].location) as Card;
-          const maxCharacters = locationCard?.slots?.maxCharacters || 99;
-          const hasPositions = locationCard?.slots?.positions && locationCard.slots.positions.length > 0;
-          
-          // Check if character already exists in this cell
-          const charExists = updatedBoard[targetCellId].characters.some(
-            char => char.id === cardId
-          );
-          
-          // If moving within the same cell (changing positions)
-          if (charExists && sourceCellId === targetCellId) {
-            // Update the position of the existing character
-            if (hasPositions && targetPosition) {
-              // Check if target position is occupied by another character
-              const otherCharInPosition = updatedBoard[targetCellId].characters.find(
-                char => char.position === targetPosition && char.id !== cardId
-              );
-              
-              if (otherCharInPosition) {
-                // Swap positions
-                updatedBoard[targetCellId].characters = updatedBoard[targetCellId].characters.map(char => {
-                  if (char.id === cardId) {
-                    return { ...char, position: targetPosition };
-                  }
-                  if (char.id === otherCharInPosition.id) {
-                    return { ...char, position: draggedPosition };
-                  }
-                  return char;
-                });
-              } else {
-                // Just move to the new position
-                updatedBoard[targetCellId].characters = updatedBoard[targetCellId].characters.map(char => {
-                  if (char.id === cardId) {
-                    return { ...char, position: targetPosition };
-                  }
-                  return char;
-                });
-              }
-            }
-            return updatedBoard;
-          }
-          
-          if (charExists) {
-            // Character already exists in a different cell, don't add duplicate
-            return updatedBoard;
-          }
-          
-          // Determine position for the character
-          let finalPosition: "left" | "right" | undefined = undefined;
-          
-          if (hasPositions) {
-            if (targetPosition) {
-              // Check if position is already occupied by a different character
-              const existingCharInPosition = updatedBoard[targetCellId].characters.find(
-                char => char.position === targetPosition
-              );
-              
-              if (existingCharInPosition && existingCharInPosition.id !== cardId) {
-                // Replace the existing character in this position
-                updatedBoard[targetCellId].characters = updatedBoard[targetCellId].characters.filter(
-                  char => char.position !== targetPosition
-                );
-              }
-              
-              finalPosition = targetPosition;
-            } else {
-              // Auto-assign position
-              const occupiedPositions = updatedBoard[targetCellId].characters.map(c => c.position);
-              if (!occupiedPositions.includes("left")) {
-                finalPosition = "left";
-              } else if (!occupiedPositions.includes("right")) {
-                finalPosition = "right";
-              } else {
-                // Both positions occupied, don't add
-                return updatedBoard;
-              }
-            }
-            
-            updatedBoard[targetCellId].characters.push({
-              id: cardId,
-              position: finalPosition
-            });
-          } else {
-            // No positions system - check if we can add more characters
-            const currentCount = updatedBoard[targetCellId].characters.length;
-            
-            if (currentCount < maxCharacters) {
-              // Can add character
-              updatedBoard[targetCellId].characters.push({
-                id: cardId,
-                position: undefined
-              });
-            } else {
-              // At max capacity, replace all characters
-              updatedBoard[targetCellId].characters = [
-                {
-                  id: cardId,
-                  position: undefined
-                }
-              ];
-            }
-          }
+    // ─────────────────────────────────────────────
+    // MOVE LOCATION BETWEEN CELLS
+    // ─────────────────────────────────────────────
+    if (cardType === "location" && sourceCellId && sourceCellId !== targetCellId) {
+      const sourceCell = updatedBoard[sourceCellId];
+      const sourceCharacters = sourceCell?.characters || [];
+
+      // Remove source cell entirely
+      delete updatedBoard[sourceCellId];
+
+      const locationCard = getCardDetails(cardId) as Card;
+      const maxCharacters = locationCard?.slots?.maxCharacters || 99;
+
+      const existingCharacters = updatedBoard[targetCellId]?.characters || [];
+      const allCharacters = [...sourceCharacters, ...existingCharacters].slice(0, maxCharacters);
+
+      updatedBoard[targetCellId] = {
+        location: cardId,
+        characters: allCharacters
+      };
+
+      return updatedBoard;
+    }
+
+    // ─────────────────────────────────────────────
+    // PLACE NEW LOCATION FROM DECK
+    // ─────────────────────────────────────────────
+    if (cardType === "location" && !sourceCellId) {
+      const locationCard = getCardDetails(cardId) as Card;
+      const maxCharacters = locationCard?.slots?.maxCharacters || 99;
+
+      const existingCharacters = updatedBoard[targetCellId]?.characters || [];
+
+      updatedBoard[targetCellId] = {
+        location: cardId,
+        characters: existingCharacters.slice(0, maxCharacters)
+      };
+
+      return updatedBoard;
+    }
+
+    // ─────────────────────────────────────────────
+    // CHARACTER LOGIC
+    // ─────────────────────────────────────────────
+    if (cardType === "character") {
+      // Check if target cell has a location
+      if (!updatedBoard[targetCellId]?.location) {
+        console.log("⛔ No location in target cell");
+        return updatedBoard;
+      }
+
+      const locationCard = getCardDetails(updatedBoard[targetCellId].location) as Card;
+      const maxCharacters = locationCard?.slots?.maxCharacters || 99;
+      const hasPositions = !!locationCard?.slots?.positions?.length;
+
+      // ─────────────────────────────────────────────
+      // CASE 1: Moving within SAME CELL (changing position)
+      // ─────────────────────────────────────────────
+      if (sourceCellId === targetCellId && hasPositions && targetPosition) {
+        // Remove character being moved
+        let newCharacters = updatedBoard[targetCellId].characters.filter(
+          char => char.id !== cardId
+        );
+
+        // Remove any character already in target position
+        newCharacters = newCharacters.filter(
+          char => char.position !== targetPosition
+        );
+
+        // Add character at new position
+        newCharacters.push({ id: cardId, position: targetPosition });
+
+        updatedBoard[targetCellId].characters = newCharacters;
+
+        return updatedBoard;
+      }
+
+      // ─────────────────────────────────────────────
+      // CASE 2: Moving from DIFFERENT CELL or DECK
+      // ─────────────────────────────────────────────
+      
+      // Step 1: Remove from source cell if exists
+      if (sourceCellId && updatedBoard[sourceCellId]) {
+        updatedBoard[sourceCellId].characters = updatedBoard[sourceCellId].characters.filter(
+          char => char.id !== cardId
+        );
+
+        // Clean up empty source cell
+        if (!updatedBoard[sourceCellId].location && updatedBoard[sourceCellId].characters.length === 0) {
+          delete updatedBoard[sourceCellId];
         }
       }
-      // If placing a new location from deck
-      else if (cardType === "location") {
-        const locationCard = getCardDetails(cardId) as Card;
-        const maxCharacters = locationCard?.slots?.maxCharacters || 99;
-        
-        // Keep existing characters up to max limit
-        const existingCharacters = updatedBoard[targetCellId]?.characters || [];
-        
-        updatedBoard[targetCellId] = {
-          location: cardId,
-          characters: existingCharacters.slice(0, maxCharacters)
-        };
+
+      // Step 2: Add to target cell
+      if (hasPositions) {
+        // With positions (left/right)
+        let newCharacters = [...updatedBoard[targetCellId].characters];
+
+        // Determine final position
+        let finalPosition: "left" | "right";
+
+        if (targetPosition) {
+          // Dropped on specific position - remove existing character there
+          newCharacters = newCharacters.filter(char => char.position !== targetPosition);
+          finalPosition = targetPosition;
+        } else {
+          // Auto-assign position
+          const occupiedPositions = newCharacters.map(c => c.position);
+          if (!occupiedPositions.includes("left")) {
+            finalPosition = "left";
+          } else if (!occupiedPositions.includes("right")) {
+            finalPosition = "right";
+          } else {
+            // No free position
+            return updatedBoard;
+          }
+        }
+
+        newCharacters.push({ id: cardId, position: finalPosition });
+        updatedBoard[targetCellId].characters = newCharacters;
+
+      } else {
+        // Without positions (single slot)
+        const currentCount = updatedBoard[targetCellId].characters.length;
+
+        if (currentCount < maxCharacters) {
+          updatedBoard[targetCellId].characters.push({ id: cardId, position: undefined });
+        } else {
+          // Replace existing
+          updatedBoard[targetCellId].characters = [{ id: cardId, position: undefined }];
+        }
       }
 
       return updatedBoard;
-    });
-  }
+    }
+
+    return updatedBoard;
+  });
+}
+
 
   function removeCardFromBoard(cellId: string, cardId: string) {
     const cardType = getCardType(cardId);
