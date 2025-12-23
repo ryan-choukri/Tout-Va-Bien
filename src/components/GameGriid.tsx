@@ -10,7 +10,7 @@ import {
   useSensors
 } from "@dnd-kit/core";
 import { useState } from "react";
-import level1 from "@/data/levels/level1.json";
+import level1 from "@/data/levels/level2.json";
 
 type BoardState = {
   [cellId: string]: {
@@ -52,10 +52,15 @@ export default function GameGrid() {
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     
-    const draggedInstanceId = String(active.id);
-    const cardId = draggedInstanceId.split('-').slice(-1)[0];
+    // Get card ID from data instead of parsing the instance ID
+    const cardId = active.data.current?.cardId;
     const sourceCellId = active.data.current?.cellId;
     const draggedPosition = active.data.current?.position;
+
+    if (!cardId) {
+      console.log("⛔ No cardId found in drag data");
+      return;
+    }
 
     // If dropped outside any droppable area, remove from board
     if (!over) {
@@ -78,7 +83,20 @@ export default function GameGrid() {
       }
     }
 
-    placeCardOnBoard(cardId, targetCellId, sourceCellId, targetPosition, draggedPosition);
+      // If dropping on a cell with no location, remove the character
+      //only if the card being dragged is a character
+    if (
+        active.data.current?.cardId &&
+        active.data.current?.cellId &&
+        (!boardState[targetCellId] || !boardState[targetCellId].location) &&
+        getCardType(cardId) === "character" 
+    ) {
+        removeCardFromBoard(sourceCellId, cardId);
+        return;
+    }
+
+
+    placeCardOnBoard(cardId, targetCellId, sourceCellId, targetPosition);
   }
 
   
@@ -87,7 +105,6 @@ export default function GameGrid() {
   targetCellId: string, 
   sourceCellId?: string,
   targetPosition?: "left" | "right",
-  draggedPosition?: "left" | "right"
 ) {
   const cardType = getCardType(cardId);
 

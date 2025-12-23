@@ -2,7 +2,7 @@
 
 import { DndContext, useDraggable, useDroppable } from "@dnd-kit/core";
 import { useState } from "react";
-import level1 from "@/data/levels/level1.json";
+import level1 from "@/data/levels/level2.json";
 
 console.log(level1);
 

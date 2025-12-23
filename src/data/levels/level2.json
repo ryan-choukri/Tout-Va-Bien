@@ -1,10 +1,31 @@
 {
-  "id": "level2",
-  "title": "Le chevalier sauve la princesse",
-  "cells": 3,
-  "cards": [
-    { "id": "knight", "label": "Chevalier" },
-    { "id": "princess", "label": "Princesse" },
-    { "id": "dragon", "label": "Dragon" }
+  "id": "level_storyteller_01",
+  "title": "Tout le monde rejette Edgar",
+  "cells": 6,
+  "cardsCaracter": [
+    { "id": "edgar", "label": "Edgar", "type": "character" },
+    { "id": "lenora", "label": "Lenora", "type": "character" },
+    { "id": "isobel", "label": "Isobel", "type": "character" },
+    { "id": "bernard", "label": "Bernard", "type": "character" }
+  ],
+  "cardsPlace": [
+    {
+      "id": "eglise",
+      "label": "Église",
+      "type": "location",
+       "positions": ["left", "right"],
+      "slots": {
+        "maxCharacters": 2
+      }
+    },
+    {
+      "id": "tombe",
+      "label": "Tombe",
+      "type": "location",
+      "positions": ["left", "right"],
+      "slots": {
+        "maxCharacters": 2
+      }
+    }
   ]
 }
