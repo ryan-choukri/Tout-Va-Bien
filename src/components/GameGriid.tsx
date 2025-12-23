@@ -115,16 +115,21 @@ export default function GameGrid() {
     // MOVE LOCATION BETWEEN CELLS
     // ─────────────────────────────────────────────
     if (cardType === "location" && sourceCellId && sourceCellId !== targetCellId) {
+        console.log('PASSAGE DANS LE SWAP !');
+
       const sourceCell = updatedBoard[sourceCellId];
       const sourceCharacters = sourceCell?.characters || [];
-
+       
       delete updatedBoard[sourceCellId];
 
       const locationCard = getCardDetails(cardId) as Card;
       const maxCharacters = locationCard?.slots?.maxCharacters || 99;
 
-      const existingCharacters = updatedBoard[targetCellId]?.characters || [];
-      const allCharacters = [...sourceCharacters, ...existingCharacters].slice(0, maxCharacters);
+      // Take characters from source cell up to maxCharacters
+      const allCharacters = [...sourceCharacters].slice(0, maxCharacters);
+      const targetCell = updatedBoard[targetCellId];
+
+      updatedBoard[sourceCellId] = targetCell;
 
       updatedBoard[targetCellId] = {
         location: cardId,
