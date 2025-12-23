@@ -1,6 +1,6 @@
 {
   "id": "level_storyteller_01",
-  "title": "3 présidents destitués",
+  "title": "3 présidents differents destituées (macron est president)",
   "cells": 6,
   "cardsCaracter": [
     { "id": "macron", "label": "Macron", "type": "character" },
@@ -28,24 +28,14 @@
       }
     }
   ],
-  "sequence_destitution": [
-    {
-      "destiteur": "melenchon",
-      "destitué": "macron",
-      "resultat": "Macron est destitué, Mélenchon devient président",
-      "popularite_necessaire": "Mélenchon > Macron"
-    },
-    {
-      "destiteur": "lepen",
-      "destitué": "melenchon",
-      "resultat": "Mélenchon est destitué, Le Pen devient présidente",
-      "popularite_necessaire": "Le Pen > Mélenchon"
-    },
-    {
-      "destiteur": "macron",
-      "destitué": "lepen",
-      "resultat": "Le Pen est destituée, Macron devient président",
-      "popularite_necessaire": "Macron > Le Pen"
-    }
-  ]
+  "victoryStates": [
+  {
+    "cell-1": { "location": "popularite", "characters": [{ "id": "melenchon" }] },
+    "cell-2": { "location": "eviction", "characters": [{ "id": "melenchon", "position": "left" }, { "id": "macron", "position": "right" }] },
+    "cell-3": { "location": "popularite", "characters": [{ "id": "lepen" }] },
+    "cell-4": { "location": "eviction", "characters": [{ "id": "lepen", "position": "left" }, { "id": "melenchon", "position": "right" }] },
+    "cell-5": { "location": "popularite", "characters": [{ "id": "macron" }] },
+    "cell-6": { "location": "eviction", "characters": [{ "id": "lepen", "position": "right" }, { "id": "macron", "position": "left" }] }
+  },
+{ "cell-2": { "location": "eviction", "characters": [ { "id": "macron", "position": "right" }, { "id": "lepen", "position": "left" } ] }, "cell-1": { "location": "popularite", "characters": [ { "id": "lepen" } ] }, "cell-3": { "location": "popularite", "characters": [ { "id": "melenchon" } ] }, "cell-4": { "location": "eviction", "characters": [ { "id": "lepen", "position": "right" }, { "id": "melenchon", "position": "left" } ] }, "cell-5": { "location": "popularite", "characters": [ { "id": "macron" } ] }, "cell-6": { "location": "eviction", "characters": [ { "id": "macron", "position": "left" }, { "id": "melenchon", "position": "right" } ] } }]
 }

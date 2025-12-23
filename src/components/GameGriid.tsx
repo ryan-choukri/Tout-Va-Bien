@@ -10,7 +10,7 @@ import {
   useSensors
 } from "@dnd-kit/core";
 import { useState } from "react";
-import level1 from "@/data/levels/level2.json";
+import levelData from "@/data/levels/level2.json";
 
 type BoardState = {
   [cellId: string]: {
@@ -32,10 +32,175 @@ type Card = {
   };
 };
 
+type Level = {
+  id: string;
+  title: string;
+  cells: number;
+  cardsCaracter: Card[];
+  cardsPlace: Card[];
+  victoryStates: BoardState[];
+};
+
+type DebugJSONProps = {
+  data: BoardState;
+};
+
+type VictoryStatus= {
+  achieved: boolean;          // true si une condition de victoire est atteinte
+  index?: number;             // index du tableau victoryStates correspondant
+  matchedState?: BoardState;  // l'état du board qui a déclenché la victoire
+};
+
+type VictoryStateDisplayProps = {
+  victoryState: {
+    achieved: boolean;
+    index?: number;
+    matchedState?: BoardState;
+  };
+};
+
+const level: Level = levelData as Level;
+
+
+const VictoryStateDisplay = ({ victoryState }: VictoryStateDisplayProps) => {
+  if (!victoryState.achieved) return null;
+
+  return (
+    <div className="p-2 bg-green-900 text-white rounded text-xs font-mono mt-2">
+      Victory! Condition #{victoryState.index !== undefined ? victoryState.index + 1 : ''} matched.
+      <pre className="overflow-auto max-h-[20vh]">{JSON.stringify(victoryState.matchedState, null, 2)}</pre>
+    </div>
+  );
+}
+
+const VictoriesSetToDebug = ({ levelVictories, setBoardState }: { levelVictories: BoardState[], setBoardState: React.Dispatch<React.SetStateAction<BoardState>> }) => {
+    return (
+        <div className="mt-4 mx-4">
+            <h3 className="text-white text-sm mb-2">Defined Victory Conditions:</h3>
+            {levelVictories.map((victory, index) => {
+            return (
+                <div key={index}>
+                           <button
+                        className="mt-2 px-3 py-1 bg-gray-700 text-white rounded text-xs hover:bg-gray-600 transition"
+                        onClick={() => setBoardState(JSON.parse(JSON.stringify(victory)))}
+                    >
+                        Set as Board State
+                    </button>
+                <div  className="mb-4 p-2 bg-gray-900 text-green-400 rounded font-mono text-xs overflow-auto max-h-[30vh]">
+                    <div className="mb-2 font-semibold">Victory Condition #{index + 1}:</div>
+                    <pre>
+                        {JSON.stringify(victory, null, 2)}
+                    </pre>
+                    </div>
+             
+                </div>)})}
+        </div>
+    );
+}
+
+const DebugJSON = ({ data }: DebugJSONProps) => {
+  const [showJSON, setShowJSON] = useState(false);
+  return (
+    <div className="mt-4 mx-4">
+      {/* Affichage compact */}
+      <pre className="p-2 rounded bg-black text-green-400 text-[10px] overflow-auto font-mono">
+        {Object.entries(data)
+          .map(([cellId, cellData]) => {
+            const chars = cellData?.characters
+              .map((c: BoardState[string]["characters"][number]) => `${c.id}${c.position ? `:${c.position}` : ""}`)
+              .join(", ");
+            return `${cellId} → ${cellData?.location || "empty"} [${chars}]`;
+          })
+          .join("\n")}
+      </pre>
+
+      {/* Bouton toggle JSON complet */}
+      <div className="mt-2">
+        <button
+          className="mb-2 px-3 py-1 bg-gray-700 text-white rounded text-xs hover:bg-gray-600 transition"
+          onClick={() => setShowJSON(!showJSON)}
+        >
+          {showJSON ? "Hide BoardState JSON" : "Display BoardState JSON"}
+        </button>
+
+        {showJSON && (
+          <div
+            className="p-2 bg-gray-900 text-green-400 rounded font-mono text-xs overflow-auto max-h-[30vh] select-all"
+          >
+            {JSON.stringify(data, null, 2)}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function areCharactersEqual(
+  a: { id: string; position?: "left" | "right" }[], 
+  b: { id: string; position?: "left" | "right" }[]
+) {
+  // Vérifie si les tableaux ont la même longueur
+  // Si le nombre de personnages est différent, ils ne peuvent pas être identiques
+  if (a.length !== b.length) return false;
+
+  // On clone et on trie les tableaux pour s'assurer que l'ordre des personnages
+  // n'affecte pas la comparaison. On concatène id + position pour créer une "clé" unique
+  const sortedA = [...a].sort((x, y) => (x.id + x.position) > (y.id + y.position) ? 1 : -1);
+  const sortedB = [...b].sort((x, y) => (x.id + x.position) > (y.id + y.position) ? 1 : -1);
+
+  // Chaque personnage dans le tableau trié A doit correspondre exactement
+  // au personnage à la même position dans le tableau trié B
+  // On compare à la fois l'id et la position pour être précis
+  return sortedA.every((char, index) => 
+    char.id === sortedB[index].id && char.position === sortedB[index].position
+  );
+}
+
+
+// Fonction de check de victoire
+function checkVictory(boardState: BoardState): number {
+  // Parcours toutes les conditions de victoire
+  for (const victoryState of level.victoryStates) {
+    let matched = true;
+    let currentVictoryIndex = -1;
+
+    for (const cellId in victoryState) {
+        const target = victoryState[cellId];
+        const current = boardState[cellId];
+
+        // Si la cellule n’existe pas ou n’a pas la même location → pas ok
+        if (!current || current.location !== target.location) {
+            matched = false;
+            currentVictoryIndex = level.victoryStates.indexOf(victoryState);
+            break;
+        }
+
+        // Vérifie que les personnages sont identiques
+        if (!areCharactersEqual(target.characters, current.characters || [])) {
+            matched = false;
+            currentVictoryIndex = level.victoryStates.indexOf(victoryState);
+            break;
+        }
+        currentVictoryIndex = level.victoryStates.indexOf(victoryState);
+        }
+
+    if (matched) {
+      return currentVictoryIndex; // une condition de victoire est atteinte
+    }
+  }
+
+  return -1; // aucune condition de victoire atteinte
+}
+
+
+
 export default function GameGrid() {
   const [boardState, setBoardState] = useState<BoardState>({});
-  const level = level1;
-
+  const [victoryState, setVictoryState] = useState<VictoryStatus>({
+  achieved: false,
+  index: undefined,
+  matchedState: undefined,
+});
   const boardCells = Array.from({ length: level.cells }, (_, i) => `cell-${i + 1}`);
   const deckCharacterCards = level.cardsCaracter;
   const deckLocationCards = level.cardsPlace;
@@ -96,10 +261,17 @@ export default function GameGrid() {
     }
 
 
-    placeCardOnBoard(cardId, targetCellId, sourceCellId, targetPosition);
+    const newBoard = placeCardOnBoard(cardId, targetCellId, sourceCellId, targetPosition);
+    // Après chaque action, tu peux faire
+    const currentVictoryIndex = checkVictory(newBoard); // ta fonction retourne l'index ou -1
+    console.log(currentVictoryIndex);
+    if (currentVictoryIndex !== -1) {
+    setVictoryState({ achieved: true, index: currentVictoryIndex });
+    } else {
+    setVictoryState({ achieved: false, index: undefined });
+    }
   }
 
-  
   function placeCardOnBoard(
   cardId: string, 
   targetCellId: string, 
@@ -107,6 +279,7 @@ export default function GameGrid() {
   targetPosition?: "left" | "right"
 ) {
   const cardType = getCardType(cardId);
+  let returnedBoard: BoardState = {};
 
   setBoardState((prevBoard) => {
     const updatedBoard: BoardState = JSON.parse(JSON.stringify(prevBoard));
@@ -129,14 +302,17 @@ export default function GameGrid() {
       const allCharacters = [...sourceCharacters].slice(0, maxCharacters);
       const targetCell = updatedBoard[targetCellId];
 
-      updatedBoard[sourceCellId] = targetCell;
+      if(targetCell) {
+          updatedBoard[sourceCellId] = targetCell;
+      }
 
       updatedBoard[targetCellId] = {
         location: cardId,
         characters: allCharacters
       };
 
-      return updatedBoard;
+      returnedBoard = updatedBoard;
+      return returnedBoard;
     }
 
     // ─────────────────────────────────────────────
@@ -153,7 +329,8 @@ export default function GameGrid() {
         characters: existingCharacters.slice(0, maxCharacters)
       };
 
-      return updatedBoard;
+      returnedBoard = updatedBoard;
+      return returnedBoard;
     }
 
     // ─────────────────────────────────────────────
@@ -185,7 +362,8 @@ export default function GameGrid() {
         if (!targetPosition) {
           // Si pas de position spécifique (drop sur la location générale), ne rien faire
           console.log("❌ Location has positions, but no specific position targeted");
-          return updatedBoard;
+            returnedBoard = updatedBoard;
+            return returnedBoard;
         }
 
         // Remove any character in the target position AND the dragged character
@@ -196,6 +374,9 @@ export default function GameGrid() {
         // Add the character at the specified position ONLY
         newCharacters.push({ id: cardId, position: targetPosition });
         updatedBoard[targetCellId].characters = newCharacters;
+        if (!updatedBoard[targetCellId].location && (!updatedBoard[targetCellId].characters || updatedBoard[targetCellId].characters.length === 0)) {
+            delete updatedBoard[targetCellId];
+        }
       } else {
         // No positions: allow free placement up to maxCharacters
         let newCharacters = updatedBoard[targetCellId].characters.filter(
@@ -207,13 +388,19 @@ export default function GameGrid() {
           newCharacters = [{ id: cardId, position: undefined }];
         }
         updatedBoard[targetCellId].characters = newCharacters;
+        if (!updatedBoard[targetCellId].location && (!updatedBoard[targetCellId].characters || updatedBoard[targetCellId].characters.length === 0)) {
+            delete updatedBoard[targetCellId];
+        }
       }
 
-      return updatedBoard;
+      returnedBoard = updatedBoard;
+      return returnedBoard;
     }
 
-    return updatedBoard;
+      returnedBoard = updatedBoard;
+      return returnedBoard;
   });
+  return returnedBoard;
 }
 
 
@@ -276,7 +463,7 @@ export default function GameGrid() {
                 >
                   <div className="w-full">
                     {/* Location Label */}
-                    <div className="text-sm font-semibold mb-2 text-center border-b border-green-500 pb-1">
+                    <div className="text-xs font-semibold mb-2 text-center border-b border-gray-500 ">
                       {location.label}
                       <span className="text-xs ml-2 opacity-75">
                         ({characters.length}/{location.slots?.maxCharacters || "∞"})
@@ -285,7 +472,7 @@ export default function GameGrid() {
                     
                     {/* Characters Section */}
                     {hasPositions ? (
-                      <div className="flex justify-between gap-2 min-h-[4rem]">
+                      <div className="flex justify-between gap-2 min-h-[3rem]">
                         {/* Left Position */}
                         <CharacterSlot 
                           cellId={cellId} 
@@ -301,7 +488,7 @@ export default function GameGrid() {
                         />
                       </div>
                     ) : (
-                      <div className="flex gap-1 flex-wrap justify-center min-h-[3rem]">
+                      <div className="flex gap-1 flex-wrap justify-center min-h-[2rem]">
                         {characters.map((char) => {
                           const card = getCardDetails(char.id);
                           
@@ -331,8 +518,8 @@ export default function GameGrid() {
       </div>
 
       {/* Deck - Always visible */}
-      <div className="flex gap-4 mt-6 justify-center flex-wrap p-4 bg-gray-800 rounded">
-        <h3 className="w-full text-center text-white text-sm mb-2">Available Cards</h3>
+      <div className="flex gap-4 mt-2 justify-center flex-wrap m-4 p-3 deck rounded">
+        {/* <h3 className="w-full text-center text-white text-sm mb-2">Available Cards</h3> */}
         
         {deckLocationCards.map((card: Card) => (
           <DeckCard 
@@ -356,7 +543,17 @@ export default function GameGrid() {
           </DeckCard>
         ))}
       </div>
+      <div className="m-4 p-3 bg-gray-800 rounded space-y-2">
+
+        <VictoryStateDisplay victoryState={victoryState} />
+
+         <DebugJSON data={boardState} />
+
+        <VictoriesSetToDebug setBoardState={setBoardState}
+        levelVictories={level.victoryStates} />
+    </div>
     </DndContext>
+    
   );
 }
 
@@ -375,7 +572,7 @@ function CharacterSlot({
   });
 
   const getCardDetails = (cardId: string) => {
-    const allCards = [...level1.cardsCaracter, ...level1.cardsPlace];
+    const allCards = [...level.cardsCaracter, ...level.cardsPlace];
     return allCards.find(c => c.id === cardId);
   };
 
@@ -384,9 +581,7 @@ function CharacterSlot({
   return (
     <div
       ref={setNodeRef}
-      className={`flex-1 border-2 border-dashed rounded p-1 min-h-[3.5rem] flex items-center justify-center ${
-        isOver ? "border-blue-400 bg-blue-900/30" : "border-gray-500"
-      } transition-all`}
+      className={`flex-1  rounded p-1 min-h-[3.5rem] flex items-center justify-center transition-all`}
     >
       {character ? (
         <CharacterCard 
@@ -410,8 +605,8 @@ function BoardCell({ id, children }: { id: string; children?: React.ReactNode })
   return (
     <div
       ref={setNodeRef}
-      className={`min-h-40 border-2 border-gray-600 rounded flex flex-col p-1 ${
-        isOver ? "border-green-500 bg-gray-600" : "bg-gray-700"
+      className={`min-h-[7rem] cells rounded flex flex-col p-1 ${
+        isOver ? " hover-bord-cells" : "bord-cells"
       } text-white transition-all`}
     >
       {children}
@@ -446,7 +641,7 @@ function LocationCard({
       style={style}
       {...listeners}
       {...attributes}
-      className="bg-green-600 text-white w-full p-3 rounded cursor-grab active:cursor-grabbing select-none transition-opacity touch-none"
+      className="min-h-[6rem] card-location-board text-white w-full p-3 rounded cursor-grab active:cursor-grabbing select-none transition-opacity touch-none"
     >
       {children}
     </div>
@@ -482,7 +677,7 @@ function CharacterCard({
       style={style}
       {...listeners}
       {...attributes}
-      className="bg-blue-600 text-white w-16 h-12 text-xs flex items-center justify-center rounded cursor-grab active:cursor-grabbing select-none transition-opacity border-2 border-blue-400 touch-none"
+      className="card-character-board text-white w-16 h-12 text-xs flex items-center justify-center rounded cursor-grab active:cursor-grabbing select-none transition-opacity  touch-none"
     >
       {children}
     </div>
@@ -510,7 +705,7 @@ function DeckCard({
     opacity: isDragging ? 0.5 : 1,
   };
 
-  const bgColor = type === "location" ? "bg-green-600" : "bg-blue-600";
+  const bgColor = type === "location" ? "card-location-deck" : "card-character-deck";
 
   return (
     <div
@@ -518,11 +713,9 @@ function DeckCard({
       style={style}
       {...listeners}
       {...attributes}
-      className={`${bgColor} text-white w-20 h-14 text-xs flex items-center justify-center rounded cursor-grab active:cursor-grabbing select-none transition-opacity border-2 touch-none ${
-        type === "location" ? "border-green-400" : "border-blue-400"
-      }`}
+      className={`${bgColor} text-white w-20 h-14 text-xs flex items-center justify-center rounded cursor-grab active:cursor-grabbing select-none transition-opacity  touch-none`}
     >
       {children}
     </div>
   );
-}
+};

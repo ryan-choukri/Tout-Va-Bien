@@ -35,10 +35,85 @@ body {
   @apply bg-gray-900 text-white;
 } */
 
+
+
+/* This is global styles for the game container and elements */
+/* game-container is the main wrapper for the game grid and elements */
 .game-container {
-  @apply bg-gray-800 shadow-lg text-black;
-  /* transform-origin: top center; */
+  background-color: #18181b; /* zinc-900 */
+  color: #e4e4e7;           /* zinc-200 */
 }
+
+/* card-location-board and card-character-board are the styles for the location and character cards on the board */
+/* .card-location-board {
+  background-color: #f5c6cd; 
+  color: #18181b;          
+} */
+
+/* .card-character-board {
+  background-color: #8dbdaf;
+  color: #0f172a;         
+} */
+
+.card-location-board,
+.card-character-board {
+  transform-origin: center;
+}
+
+.card-location-board:active,
+.card-character-board:active {
+  transform: scale(0.98);
+}
+.card-location-board,
+.card-character-board,
+.card-location-deck,
+.card-character-deck {
+  transition:
+    transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+  will-change: transform;
+}
+
+/* LOCATIONS — pastel paper, soft but structured */
+.card-location-deck,
+.card-location-board {
+    font-weight: 700;
+
+  background-color: #ffcfda;
+  color: #1f1f23;               /* slightly softer than pure black */
+  box-shadow: -1px 2px 4px 2px #31313154;
+}
+
+/* CHARACTERS — authority, depth, presence */
+.card-character-deck,
+.card-character-board {
+  background-color: #144e48;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow:-1px 2px 4px 2px #31313154;
+}
+
+
+/* bord-cells and hover-bord-cells are the styles for the cells on the board */
+.bord-cells {
+  background-color: #27272a; /* zinc-800 */
+  color: #d4d4d8;           /* zinc-300 */
+}
+
+.hover-bord-cells {
+  background-color: #3f3f46; /* zinc-700 */
+  color: #fafafa;           /* zinc-50 */
+}
+
+/* deck is the style for the deck container */
+.deck {
+  background-color: #27272a;
+  color: #d4d4d8;           /* zinc-300 */
+}
+
+
+
 
 
 .game-container {
