@@ -1,14 +1,11 @@
 {
-  "id": "level_storyteller_06",
+  "id": "level_storyteller_07",
   "shortTitle": "Le peuple s'éduque",
   "title": "Du bêtisier à la révolte : le peuple s’éduque !",
   "cells": 4,
   "cardsCaracter": [
     { "id": "peuple", "label": "Peuple", "type": "character" },
-    { "id": "police", "label": "Police", "type": "character" },
-    { "id": "1er ministre", "label": "Ministre", "type": "character" },
-    { "id": "lobby", "label": "Lobby", "type": "character" }
-  ],
+    { "id": "1er ministre", "label": "Ministre", "type": "character" }  ],
   "cardsPlace": [
     {
       "id": "manifestation",

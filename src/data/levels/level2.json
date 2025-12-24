@@ -38,5 +38,6 @@
   ],
   "victoryStates": [
     
-{ "cell-1": { "location": "enquete", "characters": [ { "id": "fillion" }, { "id": "fillon", "position": "right" }, { "id": "mediapart", "position": "left" } ] }, "cell-2": { "location": "tv", "characters": [ { "id": "mediapart" } ] }, "cell-3": { "location": "tribunal", "characters": [ { "id": "mediapart" } ] } }]
-}
+{ "cell-1": { "location": "enquete", "characters": [ { "id": "fillion" }, { "id": "fillon", "position": "right" }, { "id": "mediapart", "position": "left" } ] }, "cell-2": { "location": "tv", "characters": [ { "id": "mediapart" } ] }, "cell-3": { "location": "tribunal", "characters": [ { "id": "fillon" } ] } }
+  ]
+  }

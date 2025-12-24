@@ -58,9 +58,9 @@ const VictoriesSetToDebug = ({ levelVictories, setBoardState }: { levelVictories
 const DebugJSON = ({ data }: DebugJSONProps) => {
   const [showJSON, setShowJSON] = useState(false);
   return (
-    <div className=" mt-4 mx-4">
+    <div className=" mt-4 mx-4 !pt-4">
       {/* Affichage compact */}
-      <pre className="p-2 rounded bg-black text-green-400 text-[10px] overflow-auto font-mono">
+      <pre className=" p-2 rounded bg-black text-green-400 text-[10px] overflow-auto font-mono">
         {Object.entries(data)
           .map(([cellId, cellData]) => {
             const chars = cellData?.characters
@@ -151,10 +151,14 @@ function checkVictory({ boardState, level }: { boardState: BoardState; level: Le
 
 
 
-export default function GameGrid({ levelData }: { levelData: Level }) {
+export default function GameGrid({ showDebug, levels, levelData }: { showDebug: boolean; levels: Level[]; levelData: Level }) {
   const level: Level = levelData;
   const [boardState, setBoardState] = useState<BoardState>({});
   const [activeId, setActiveId] = useState<string | null>(null);
+  //SET showDebug defaut value link to the envoironnement variable
+  //process.env if its in prod or dev
+
+
   const [activeCard, setActiveCard] = useState<{
     id: string;
     type: "location" | "character";
@@ -246,8 +250,8 @@ export default function GameGrid({ levelData }: { levelData: Level }) {
       }
     }
 
-      // If dropping on a cell with no location, remove the character
-      //only if the card being dragged is a character
+    // If dropping on a cell with no location, remove the character
+    //only if the card being dragged is a character
     if (
         active.data.current?.cardId &&
         active.data.current?.cellId &&
@@ -258,11 +262,9 @@ export default function GameGrid({ levelData }: { levelData: Level }) {
         return;
     }
 
-
     const newBoard = placeCardOnBoard(cardId, targetCellId, sourceCellId, targetPosition);
     // Après chaque action, tu peux faire
     const currentVictoryIndex = checkVictory({ boardState: newBoard, level }); // ta fonction retourne l'index ou -1
-    console.log(currentVictoryIndex);
     if (currentVictoryIndex !== -1) {
     setVictoryState({ achieved: true, index: currentVictoryIndex });
     } else {
@@ -440,16 +442,18 @@ export default function GameGrid({ levelData }: { levelData: Level }) {
   
   return (
   <>
-    <div className="game-container flex-1 max-w-[600px] shadow-lg">
+    <div 
+    className={`game-container flex flex-col max-w-[650px] shadow-lg rounded-xl ${victoryState.achieved ? " victory-game" : ""}`}>
       <DndContext 
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd} 
         sensors={sensors}
       >
-        <h2 className="text-white text-lg mt-3 text-center">{level.title}</h2>
+
+        <h2 className="text-white text-sm mt-3 text-center mx-4">{level.title}</h2>
         
         {/* Board Grid */}
-        <div className="grid grid-cols-3 gap-2 px-4 py-2 ">
+        <div className="min-h-[248px] content-center grid grid-cols-3 gap-2 px-4 py-2 ">
           {boardCells.map((cellId) => {
             const cellData = boardState[cellId];
             const location = cellData?.location ? getCardDetails(cellData.location) : null;
@@ -523,7 +527,7 @@ export default function GameGrid({ levelData }: { levelData: Level }) {
         </div>
 
         {/* Deck - Always visible */}
-        <div className="flex gap-4 mt-0 justify-center flex-wrap m-4 p-3 deck rounded">
+        <div className="flex gap-1 mt-0 justify-center flex-wrap m-4 p-3 deck rounded">
           {/* <h3 className="w-full text-center text-white text-sm mb-2">Available Cards</h3> */}
           {deckLocationCards.map((card: Card) => (
             <DeckCard 
@@ -626,15 +630,18 @@ export default function GameGrid({ levelData }: { levelData: Level }) {
         </DragOverlay>
       </DndContext>
     </div>
-      <div className="mt-4 max-w-[500px] flex-1 bg-gray-800 rounded space-y-2">
-
-    <VictoryStateDisplay victoryState={victoryState} />
-
-      <DebugJSON data={boardState} />
-
-    <VictoriesSetToDebug setBoardState={setBoardState}
-    levelVictories={level.victoryStates} />
-</div>
+        {showDebug && (
+          <div className="mt-4 max-w-[500px] flex-1 bg-gray-800 rounded space-y-2">
+            <VictoryStateDisplay victoryState={victoryState} />
+            <DebugJSON data={boardState} />
+            <VictoriesSetToDebug setBoardState={setBoardState}
+            levelVictories={level.victoryStates} />
+            <h4 className="text-white text-sm mx-4 mt-4">Every Levels of the game</h4>
+            <div className="font-mono text-xs select-all m-2 p-4 bg-gray-900 text-white text-xs rounded h-48 overflow-auto">
+              <pre>{JSON.stringify(levels, null, 2)}</pre>
+            </div>
+          </div>
+        )}
   </>
   );
 }
@@ -689,7 +696,7 @@ function BoardCell({ id, children }: { id: string; children?: React.ReactNode })
   return (
     <div
       ref={setNodeRef}
-      className={`min-h-[7rem] cells rounded flex flex-col p-1 ${
+      className={`min-h-[7rem] max-h-[112px]  cells rounded flex flex-col p-1 ${
         isOver ? " hover-bord-cells" : "bord-cells"
       } text-white transition-all`}
     >

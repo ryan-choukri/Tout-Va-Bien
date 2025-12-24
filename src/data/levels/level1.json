@@ -28,6 +28,7 @@
     }
   ],
   "victoryStates": [
-  { "cell-4": { "location": "eviction", "characters": [ { "id": "macron", "position": "right" }, { "id": "melenchon", "position": "left" } ] }, "cell-1": { "location": "popularite", "characters": [ { "id": "melenchon" } ] }, "cell-2": { "location": "eviction", "characters": [ { "id": "macron", "position": "right" }, { "id": "melenchon", "position": "left" } ] } }]
-}
+{ "cell-2": { "location": "eviction", "characters": [ { "id": "macron", "position": "right" }, { "id": "melenchon", "position": "left" } ] }, "cell-1": { "location": "popularite", "characters": [ { "id": "melenchon" } ] } }
+  ]
+  }
 

@@ -44,6 +44,10 @@ body {
   color: #e4e4e7;           /* zinc-200 */
 }
 
+.victory-game {
+  box-shadow: inset 0px 0px 0em 6px #22c55e;
+}
+
 /* card-location-board and card-character-board are the styles for the location and character cards on the board */
 /* .card-location-board {
   background-color: #f5c6cd; 

@@ -3,7 +3,7 @@
   "id": "level_storyteller_06",
   "shortTitle": "Sarko en prison !",
   "title": "Met Sarko en prison !",
-  "cells": 6,
+  "cells": 4,
   "cardsCaracter": [
     { "id": "kadafi", "label": "Kadafi", "type": "character" } ,
     { "id": "sarko", "label": "Sarko", "type": "character" } ,

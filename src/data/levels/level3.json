@@ -30,4 +30,86 @@
     }
   ],
   "victoryStates": [
-{ "cell-1": { "location": "reunion", "characters": [ { "id": "lobby", "position": "left" }, { "id": "entreprise", "position": "right" } ] }, "cell-2": { "location": "reunion", "characters": [ { "id": "lobby", "position": "left" }, { "id": "1er ministre", "position": "right" } ] }, "cell-3": { "location": "assemblée", "characters": [ { "id": "1er ministre" } ] } }  ]}
+
+  {
+    "cell-3": {
+      "location": "assemblée",
+      "characters": [{ "id": "1er ministre" }]
+    },
+    "cell-2": {
+      "location": "reunion",
+      "characters": [
+        { "id": "1er ministre", "position": "left" },
+        { "id": "lobby", "position": "right" }
+      ]
+    },
+    "cell-1": {
+      "location": "reunion",
+      "characters": [
+        { "id": "entreprise", "position": "left" },
+        { "id": "lobby", "position": "right" }
+      ]
+    }
+  },
+  {
+    "cell-3": {
+      "location": "assemblée",
+      "characters": [{ "id": "1er ministre" }]
+    },
+    "cell-2": {
+      "location": "reunion",
+      "characters": [
+        { "id": "lobby", "position": "left" },
+        { "id": "1er ministre", "position": "right" }
+      ]
+    },
+    "cell-1": {
+      "location": "reunion",
+      "characters": [
+        { "id": "entreprise", "position": "left" },
+        { "id": "lobby", "position": "right" }
+      ]
+    }
+  },
+  {
+    "cell-3": {
+      "location": "assemblée",
+      "characters": [{ "id": "1er ministre" }]
+    },
+    "cell-2": {
+      "location": "reunion",
+      "characters": [
+        { "id": "1er ministre", "position": "left" },
+        { "id": "lobby", "position": "right" }
+      ]
+    },
+    "cell-1": {
+      "location": "reunion",
+      "characters": [
+        { "id": "lobby", "position": "left" },
+        { "id": "entreprise", "position": "right" }
+      ]
+    }
+  },
+  {
+    "cell-3": {
+      "location": "assemblée",
+      "characters": [{ "id": "1er ministre" }]
+    },
+    "cell-2": {
+      "location": "reunion",
+      "characters": [
+        { "id": "lobby", "position": "left" },
+        { "id": "1er ministre", "position": "right" }
+      ]
+    },
+    "cell-1": {
+      "location": "reunion",
+      "characters": [
+        { "id": "lobby", "position": "left" },
+        { "id": "entreprise", "position": "right" }
+      ]
+    }
+  }
+
+    ]}
