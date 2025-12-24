@@ -443,7 +443,7 @@ export default function GameGrid({ showDebug, levels, levelData }: { showDebug: 
   return (
   <>
     <div 
-    className={`game-container flex flex-col max-w-[650px] shadow-lg rounded-xl ${victoryState.achieved ? " victory-game" : ""}`}>
+    className={`game-container flex flex-col shadow-lg rounded-xl ${victoryState.achieved ? " victory-game" : ""}`}>
       <DndContext 
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd} 
@@ -453,8 +453,8 @@ export default function GameGrid({ showDebug, levels, levelData }: { showDebug: 
         <h2 className="text-white text-sm mt-3 text-center mx-4">{level.title}</h2>
         
         {/* Board Grid */}
-        <div className="min-h-[248px] content-center grid grid-cols-3 gap-2 px-4 py-2 ">
-          {boardCells.map((cellId) => {
+        <div className="min-h-[218px] content-center grid grid-cols-3 gap-2 px-4 py-2 ">
+          {boardCells.map((cellId, index) => {
             const cellData = boardState[cellId];
             const location = cellData?.location ? getCardDetails(cellData.location) : null;
             const characters = cellData?.characters || [];
@@ -479,7 +479,7 @@ export default function GameGrid({ showDebug, levels, levelData }: { showDebug: 
                       
                       {/* Characters Section */}
                       {hasPositions ? (
-                        <div className="flex justify-between gap-2 min-h-[3rem]">
+                        <div className="flex justify-between gap-2 min-h-[2rem]">
                           {/* Left Position */}
                           <CharacterSlot 
                           level={level}
@@ -517,9 +517,18 @@ export default function GameGrid({ showDebug, levels, levelData }: { showDebug: 
                     </div>
                   </LocationCard>
                 ) : (
-                  <div className="w-full text-center text-gray-400 text-xs h-full flex items-center justify-center">
-                    Drop a location here
+                  <div className="w-full text-center text-gray-400 text-xs h-full flex flex-col items-center justify-center">
+                    <span> 
+                      Place une scène ici 
+                      <br />            
+                      {index ===  boardCells.length -1 && (
+                        <span className="!text-[10px]"> 
+                        (Glisse les cartes pour resoudre l&apos;histoire !)
+                        </span>
+                      )}
+                  </ span>
                   </div>
+
                 )}
               </BoardCell>
             );
@@ -527,7 +536,7 @@ export default function GameGrid({ showDebug, levels, levelData }: { showDebug: 
         </div>
 
         {/* Deck - Always visible */}
-        <div className="flex gap-1 mt-0 justify-center flex-wrap m-4 p-3 deck rounded">
+        <div className="flex gap-1 mt-0 justify-center flex-wrap p-2 deck rounded">
           {/* <h3 className="w-full text-center text-white text-sm mb-2">Available Cards</h3> */}
           {deckLocationCards.map((card: Card) => (
             <DeckCard 
@@ -672,7 +681,7 @@ function CharacterSlot({
   return (
     <div
       ref={setNodeRef}
-      className={`flex-1  rounded p-1 min-h-[3.5rem] flex items-center justify-center transition-all`}
+      className={`flex-1 rounded min-h-[3rem] flex items-center justify-center transition-all`}
     >
       {character ? (
         <CharacterCard 
@@ -696,7 +705,7 @@ function BoardCell({ id, children }: { id: string; children?: React.ReactNode })
   return (
     <div
       ref={setNodeRef}
-      className={`min-h-[7rem] max-h-[112px]  cells rounded flex flex-col p-1 ${
+      className={`min-h-[6rem] max-h-[112px] max-w-[198px] cells rounded flex flex-col p-1 ${
         isOver ? " hover-bord-cells" : "bord-cells"
       } text-white transition-all`}
     >
@@ -732,7 +741,7 @@ function LocationCard({
       style={style}
       {...listeners}
       {...attributes}
-      className="min-h-[6rem] card-location-board text-white w-full p-3 rounded cursor-grab active:cursor-grabbing select-none transition-opacity touch-none"
+      className="min-h-[5rem] card-location-board text-white w-full p-2 rounded cursor-grab active:cursor-grabbing select-none transition-opacity touch-none"
     >
       {children}
     </div>

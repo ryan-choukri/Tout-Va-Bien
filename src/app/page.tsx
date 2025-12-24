@@ -39,6 +39,15 @@ export default function Home() {
   // Collapse sidebar on mobile/small screens
   useEffect(() => {
     const handleResize = () => {
+        // CHECK if my app is running on mobile but not by the size
+      const isMobileLike =
+        typeof window !== "undefined" &&
+        navigator.maxTouchPoints > 0;
+
+      if (isMobileLike) {
+        setSidebarCollapsed(true);
+        return;
+      }
       if (window.innerWidth < 640) {
         setSidebarCollapsed(true);
       } else {
@@ -51,10 +60,9 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex min-h-screen gap-4  bg-gray-950">
-            {/* Bouton toggle debug */}
+    <div className="flex min-h-screen h-screen gap-4 bg-gray-950">
       <button
-        className="absolute bottom-2 right-2 bg-gray-600 text-white text-xs px-2 py-1 rounded shadow"
+        className={`absolute bottom-2 right-2 text-white text-xs px-2 py-1 rounded shadow ${showDebug ? "bg-green-800" : "bg-gray-600"}`}
         onClick={() => setShowDebug(!showDebug)}
       >
         🔧
@@ -64,12 +72,13 @@ export default function Home() {
       {/* Make the sidebar scrollable and size fixed for all devices */}
       <aside
         className={`
-          max-h-[100vh] overflow-y-auto
+          overflow-y-auto max-h-screen
           relative flex flex-col
           bg-gradient-to-b from-gray-800 to-gray-900
           rounded-xl shadow-xl 
           !rounded-none border-r-4 border-gray-700/50
           transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
+          min-w-[3.5rem]
           ${sidebarCollapsed ? "w-14" : "w-48"}
         `}
       >
@@ -176,7 +185,8 @@ export default function Home() {
       </aside>
 
       {/* Container du jeu */}
-      <main className="flex-1">
+      <main 
+        className="flex flex-col items-center flex-1 max-w-[650px] mx-auto">
         <GameGrid showDebug={showDebug} levels={levels as Level[]} key={currentLevel.id} levelData={currentLevel as Level} />
       </main>
     </div>
