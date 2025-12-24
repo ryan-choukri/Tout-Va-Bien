@@ -11,6 +11,14 @@ import {
   useSensor,
   useSensors
 } from "@dnd-kit/core";
+
+import { CharacterSlot } from "./components/CharacterSlot";
+import { CharacterCard } from "./components/CharacterCard";
+import { LocationCard } from "./components/LocationCard";
+import { BoardCell } from "./components/BoardCell";
+import { DeckCard } from "./components/DeckCard";
+import { DebugJSON } from "./components/DebugJSON";
+
 import { useState } from "react";
 // import levelData from "@/data/levels/level2.json";
 
@@ -55,42 +63,6 @@ const VictoriesSetToDebug = ({ levelVictories, setBoardState }: { levelVictories
     );
 }
 
-const DebugJSON = ({ data }: DebugJSONProps) => {
-  const [showJSON, setShowJSON] = useState(false);
-  return (
-    <div className=" mt-4 mx-4 !pt-4">
-      {/* Affichage compact */}
-      <pre className=" p-2 rounded bg-black text-green-400 text-[10px] overflow-auto font-mono">
-        {Object.entries(data)
-          .map(([cellId, cellData]) => {
-            const chars = cellData?.characters
-              .map((c: BoardState[string]["characters"][number]) => `${c.id}${c.position ? `:${c.position}` : ""}`)
-              .join(", ");
-            return `${cellId} → ${cellData?.location || "empty"} [${chars}]`;
-          })
-          .join("\n")}
-      </pre>
-
-      {/* Bouton toggle JSON complet */}
-      <div className="mt-2">
-        <button
-          className="mb-2 px-3 py-1 bg-gray-700 text-white rounded text-xs hover:bg-gray-600 transition"
-          onClick={() => setShowJSON(!showJSON)}
-        >
-          {showJSON ? "Hide BoardState JSON" : "Display BoardState JSON"}
-        </button>
-
-        {showJSON && (
-          <div
-            className="p-2 bg-gray-900 text-green-400 rounded font-mono text-xs overflow-auto max-h-[8vh] select-all"
-          >
-            {JSON.stringify(data, null, 2)}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
 
 function areCharactersEqual(
   a: { id: string; position?: "left" | "right" }[], 
@@ -654,168 +626,3 @@ export default function GameGrid({ showDebug, levels, levelData }: { showDebug: 
   </>
   );
 }
-
-function CharacterSlot({ 
-    level,
-  cellId, 
-  position, 
-  character 
-}: { 
-    level: Level;
-  cellId: string; 
-  position: "left" | "right";
-  character?: { id: string; position?: "left" | "right" };
-}) {
-  const { isOver, setNodeRef } = useDroppable({ 
-    id: `${cellId}-${position}`,
-    data: { position, cellId }
-  });
-
-  const getCardDetails = (cardId: string) => {
-    const allCards = [...level.cardsCaracter, ...level.cardsPlace];
-    return allCards.find(c => c.id === cardId);
-  };
-
-  const card = character ? getCardDetails(character.id) : null;
-  
-  return (
-    <div
-      ref={setNodeRef}
-      className={`flex-1 rounded min-h-[3rem] flex items-center justify-center transition-all`}
-    >
-      {character ? (
-        <CharacterCard 
-          instanceId={`${cellId}-${character.id}-${position}`}
-          cardId={character.id}
-          cellId={cellId}
-          position={position}
-        >
-          {card?.label || character.id}
-        </CharacterCard>
-      ) : (
-        <span className="text-xs text-gray-500 capitalize">{position}</span>
-      )}
-    </div>
-  );
-}
-
-function BoardCell({ id, children }: { id: string; children?: React.ReactNode }) {
-  const { isOver, setNodeRef } = useDroppable({ id });
-  
-  return (
-    <div
-      ref={setNodeRef}
-      className={`min-h-[6rem] max-h-[112px] max-w-[198px] cells rounded flex flex-col p-1 ${
-        isOver ? " hover-bord-cells" : "bord-cells"
-      } text-white transition-all`}
-    >
-      {children}
-    </div>
-  );
-}
-
-function LocationCard({ 
-  instanceId, 
-  cardId,
-  children, 
-  cellId 
-}: { 
-  instanceId: string;
-  cardId: string;
-  children: React.ReactNode; 
-  cellId: string;
-}) {
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ 
-    id: instanceId, 
-    data: { cellId, cardId } 
-  });
-  
-  const style = {
-    // transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
-    opacity: isDragging ? 0 : 1, // Completely invisible when dragging
-  };
-
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...listeners}
-      {...attributes}
-      className="min-h-[5rem] card-location-board text-white w-full p-2 rounded cursor-grab active:cursor-grabbing select-none transition-opacity touch-none"
-    >
-      {children}
-    </div>
-  );
-}
-
-function CharacterCard({ 
-  instanceId, 
-  cardId,
-  children, 
-  cellId,
-  position
-}: { 
-  instanceId: string;
-  cardId: string;
-  children: React.ReactNode; 
-  cellId: string;
-  position?: "left" | "right";
-}) {
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ 
-    id: instanceId, 
-    data: { cellId, cardId, position } 
-  });
-  
-  const style = {
-    transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
-    opacity: isDragging ? 0 : 1, // Completely invisible when dragging
-  };
-
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...listeners}
-      {...attributes}
-      className="p-4 card-character-board text-white w-16 h-12 text-xs flex items-center justify-center rounded cursor-grab active:cursor-grabbing select-none transition-opacity touch-none"
-    >
-      {children}
-    </div>
-  );
-}
-
-function DeckCard({ 
-  instanceId, 
-  cardId,
-  children, 
-  type
-}: { 
-  instanceId: string;
-  cardId: string;
-  children: React.ReactNode; 
-  type: "location" | "character";
-}) {
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ 
-    id: instanceId, 
-    data: { cardId, cellId: undefined } 
-  });
-  
-  const style = {
-    // transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
-    opacity: isDragging ? 0 : 1, // Completely invisible when dragging
-  };
-  
-  const bgColor = type === "location" ? "card-location-deck" : "card-character-deck";
-
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...listeners}
-      {...attributes}
-      className={`${bgColor} p-4 text-white w-20 h-14 text-xs flex items-center justify-center rounded cursor-grab active:cursor-grabbing select-none transition-opacity touch-none`}
-    >
-      {children}
-    </div>
-  );
-};
