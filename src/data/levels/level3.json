@@ -1,7 +1,7 @@
 {
-  "id": "level_storyteller_02",
+  "id": "level_storyteller_03",
   "title": "3 présidents differents destituées (macron est president)",
-  "cells": 6,
+  "cells": 7,
   "cardsCaracter": [
     { "id": "macron", "label": "Macron", "type": "character" },
     { "id": "melenchon", "label": "Mélenchon", "type": "character" },
