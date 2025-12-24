@@ -1,7 +1,7 @@
 {
   "id": "level_storyteller_06",
   "shortTitle": "Le peuple s'éduque",
-  "title": "Le peuple s'éduque et se rebelle !",
+  "title": "Du bêtisier à la révolte : le peuple s’éduque !",
   "cells": 4,
   "cardsCaracter": [
     { "id": "peuple", "label": "Peuple", "type": "character" },

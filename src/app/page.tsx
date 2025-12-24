@@ -47,9 +47,9 @@ export default function Home() {
       </div>
 
       {/* Container du jeu */}
-      <div className="game-container flex-1 max-w-[600px] aspect-[9/16] shadow-lg">
+        <div className="flex-1 flex" style={{ flexDirection: "column" }}>
         <GameGrid key={currentLevel.id} levelData={currentLevel as Level}  />
-      </div>
+        </div>
     </div>
   );
 }
