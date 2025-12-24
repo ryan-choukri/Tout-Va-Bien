@@ -20,6 +20,7 @@ export type Card = {
 
 export type Level = {
   id: string;
+  shortTitle: string;
   title: string;
   cells: number;
   cardsCaracter: Card[];

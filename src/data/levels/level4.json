@@ -1,0 +1,44 @@
+{
+  "id": "level_storyteller_03",
+  "shortTitle": "Peuple se rebelle !",
+  "title": "Lobby fait voter une loi ... Mais le peuple se rebelle !",
+  "cells": 5,
+  "cardsCaracter": [
+    { "id": "lobby", "label": "Lobby", "type": "character" },
+    { "id": "1er ministre", "label": "ministre", "type": "character" },
+    { "id": "entreprise", "label": "Entreprise Polluante", "type": "character" }
+  ],
+  "cardsPlace": [
+      {
+      "id": "manifestation",
+      "label": "Manif contre ",
+      "type": "location",
+      "slots": {
+      "maxCharacters": 1,
+        "rules": "Lors d'une manifestation, le peuple peut s'opposer à un personnage"
+      }
+    },
+    {
+      "id": "reunion",
+      "label": "Réunion",
+      "type": "location",
+      "slots": {
+        "maxCharacters": 2,
+                "positions": ["left", "right"],
+
+        "rules": "Lors d'une réunion, un personnage peut convaincre un autre personnage de soutenir sa cause"
+      }
+    },
+    {
+      "id": "assemblée",
+      "label": "Assemblée Nationale",
+      "type": "location",
+      "slots": {
+        "maxCharacters": 1,
+        "rules": "A l'assemblée, un personnage peut faire passer une loi"
+      }
+    }
+  ],
+  "victoryStates": [
+{ "cell-1": { "location": "reunion", "characters": [ { "id": "entreprise", "position": "right" }, { "id": "lobby", "position": "left" } ] }, "cell-2": { "location": "reunion", "characters": [ { "id": "lobby", "position": "left" }, { "id": "1er ministre", "position": "right" } ] }, "cell-3": { "location": "assemblée", "characters": [ { "id": "1er ministre" } ] }, "cell-4": { "location": "manifestation", "characters": [ { "id": "1er ministre" } ] }, "cell-5": { "location": "assemblée", "characters": [ { "id": "lobby" } ] } }
+]}

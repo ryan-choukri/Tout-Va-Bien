@@ -1,41 +1,33 @@
 {
   "id": "level_storyteller_03",
-  "title": "3 présidents differents destituées (macron est president)",
-  "cells": 7,
+  "shortTitle": "Lobby fait voter une loi",
+  "title": "Lobby fait voter une loi pour que les océans deviennent des dépotoirs VIP",
+  "cells": 3,
   "cardsCaracter": [
-    { "id": "macron", "label": "Macron", "type": "character" },
-    { "id": "melenchon", "label": "Mélenchon", "type": "character" },
-    { "id": "lepen", "label": "Le Pen", "type": "character" }
+    { "id": "lobby", "label": "Lobby", "type": "character" },
+    { "id": "1er ministre", "label": "ministre", "type": "character" },
+    { "id": "entreprise", "label": "Entreprise Polluante", "type": "character" }
   ],
   "cardsPlace": [
-    {
-      "id": "eviction",
-      "label": "Eviction",
+        {
+      "id": "reunion",
+      "label": "Réunion",
       "type": "location",
       "slots": {
-        "positions": ["left", "right"],
         "maxCharacters": 2,
-        "rules": "Le personnage à gauche doit être plus populaire que celui à droite pour réussir la destitution"
+                "positions": ["left", "right"],
+        "rules": "Lors d'une réunion, un personnage peut convaincre un autre personnage de soutenir sa cause"
       }
     },
     {
-      "id": "popularite",
-      "label": "Popularité",
+      "id": "assemblée",
+      "label": "Assemblée Nationale",
       "type": "location",
       "slots": {
         "maxCharacters": 1,
-        "rules": "Détermine quel personnage peut destituer le président actuel"
+        "rules": "A l'assemblée, un personnage peut faire passer une loi"
       }
     }
   ],
   "victoryStates": [
-  {
-    "cell-1": { "location": "popularite", "characters": [{ "id": "melenchon" }] },
-    "cell-2": { "location": "eviction", "characters": [{ "id": "melenchon", "position": "left" }, { "id": "macron", "position": "right" }] },
-    "cell-3": { "location": "popularite", "characters": [{ "id": "lepen" }] },
-    "cell-4": { "location": "eviction", "characters": [{ "id": "lepen", "position": "left" }, { "id": "melenchon", "position": "right" }] },
-    "cell-5": { "location": "popularite", "characters": [{ "id": "macron" }] },
-    "cell-6": { "location": "eviction", "characters": [{ "id": "lepen", "position": "right" }, { "id": "macron", "position": "left" }] }
-  },
-{ "cell-2": { "location": "eviction", "characters": [ { "id": "macron", "position": "right" }, { "id": "lepen", "position": "left" } ] }, "cell-1": { "location": "popularite", "characters": [ { "id": "lepen" } ] }, "cell-3": { "location": "popularite", "characters": [ { "id": "melenchon" } ] }, "cell-4": { "location": "eviction", "characters": [ { "id": "lepen", "position": "right" }, { "id": "melenchon", "position": "left" } ] }, "cell-5": { "location": "popularite", "characters": [ { "id": "macron" } ] }, "cell-6": { "location": "eviction", "characters": [ { "id": "macron", "position": "left" }, { "id": "melenchon", "position": "right" } ] } }]
-}
+{ "cell-1": { "location": "reunion", "characters": [ { "id": "lobby", "position": "left" }, { "id": "entreprise", "position": "right" } ] }, "cell-2": { "location": "reunion", "characters": [ { "id": "lobby", "position": "left" }, { "id": "1er ministre", "position": "right" } ] }, "cell-3": { "location": "assemblée", "characters": [ { "id": "1er ministre" } ] } }  ]}

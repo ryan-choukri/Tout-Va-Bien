@@ -1,0 +1,46 @@
+{
+  "id": "level_storyteller_06",
+  "shortTitle": "Le peuple s'éduque",
+  "title": "Le peuple s'éduque et se rebelle !",
+  "cells": 4,
+  "cardsCaracter": [
+    { "id": "peuple", "label": "Peuple", "type": "character" },
+    { "id": "police", "label": "Police", "type": "character" },
+    { "id": "1er ministre", "label": "Ministre", "type": "character" },
+    { "id": "lobby", "label": "Lobby", "type": "character" }
+  ],
+  "cardsPlace": [
+    {
+      "id": "manifestation",
+      "label": "Manifestation",
+      "type": "location",
+      "slots": { "maxCharacters": 1, "rules": "Peuple peut s’opposer à un personnage" }
+    },
+    {
+      "id": "école",
+      "label": "École",
+      "type": "location",
+      "slots": { "maxCharacters": 1, "rules": "Éduque un personnage pour le renforcer" }
+    },
+    {
+      "id": "émission",
+      "label": "Émission débile",
+      "type": "location",
+      "slots": { "maxCharacters": 1, "rules": "Affaiblit l’image de 2 personnages" }
+    },
+      {
+      "id": "eviction",
+      "label": "Eviction",
+      "type": "location",
+      "slots": {
+        "positions": ["left", "right"],
+        "maxCharacters": 2,
+        "rules": "Le personnage à gauche doit être plus populaire que celui à droite pour réussir la destitution"
+      }
+    }
+
+  ],
+  "victoryStates": [
+    { "cell-4": { "location": "eviction", "characters": [ { "id": "peuple", "position": "left" }, { "id": "1er ministre", "position": "right" } ] }, "cell-3": { "location": "manifestation", "characters": [ { "id": "peuple" } ] }, "cell-2": { "location": "école", "characters": [ { "id": "peuple" } ] }, "cell-1": { "location": "émission", "characters": [ { "id": "peuple" } ] } }
+  ]
+}

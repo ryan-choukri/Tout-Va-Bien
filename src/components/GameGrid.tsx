@@ -290,8 +290,6 @@ export default function GameGrid({ levelData }: { levelData: Level }) {
     // MOVE LOCATION BETWEEN CELLS
     // ─────────────────────────────────────────────
     if (cardType === "location" && sourceCellId && sourceCellId !== targetCellId) {
-        console.log('PASSAGE DANS LE SWAP !');
-
       const sourceCell = updatedBoard[sourceCellId];
       const sourceCharacters = sourceCell?.characters || [];
        
@@ -439,8 +437,6 @@ export default function GameGrid({ levelData }: { levelData: Level }) {
   function getCardType(cardId: string): "location" | "character" {
     return deckLocationCards.some(c => c.id === cardId) ? "location" : "character";
   }
-
-  console.log(boardState);
   
   return (
     <DndContext 
@@ -715,7 +711,7 @@ function LocationCard({
   });
   
   const style = {
-    transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
+    // transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
     opacity: isDragging ? 0 : 1, // Completely invisible when dragging
   };
 
@@ -761,7 +757,7 @@ function CharacterCard({
       style={style}
       {...listeners}
       {...attributes}
-      className="card-character-board text-white w-16 h-12 text-xs flex items-center justify-center rounded cursor-grab active:cursor-grabbing select-none transition-opacity touch-none"
+      className="p-4 card-character-board text-white w-16 h-12 text-xs flex items-center justify-center rounded cursor-grab active:cursor-grabbing select-none transition-opacity touch-none"
     >
       {children}
     </div>
@@ -785,10 +781,10 @@ function DeckCard({
   });
   
   const style = {
-    transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
+    // transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
     opacity: isDragging ? 0 : 1, // Completely invisible when dragging
   };
-
+  
   const bgColor = type === "location" ? "card-location-deck" : "card-character-deck";
 
   return (
@@ -797,7 +793,7 @@ function DeckCard({
       style={style}
       {...listeners}
       {...attributes}
-      className={`${bgColor} text-white w-20 h-14 text-xs flex items-center justify-center rounded cursor-grab active:cursor-grabbing select-none transition-opacity touch-none`}
+      className={`${bgColor} p-4 text-white w-20 h-14 text-xs flex items-center justify-center rounded cursor-grab active:cursor-grabbing select-none transition-opacity touch-none`}
     >
       {children}
     </div>
