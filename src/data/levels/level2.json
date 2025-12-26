@@ -5,9 +5,10 @@
   "cells": 3,
   "cardsCaracter": [
     { "id": "fillon", "label": "Fillon", "type": "character" },
-    { "id": "mediapart", "label": "Mediapart", "type": "character" }  ],
+    { "id": "mediapart", "label": "Mediapart", "type": "character" }
+  ],
   "cardsPlace": [
-        {
+    {
       "id": "enquete",
       "label": "Enquete",
       "type": "location",
@@ -37,7 +38,17 @@
     }
   ],
   "victoryStates": [
-    
-{ "cell-1": { "location": "enquete", "characters": [ { "id": "fillion" }, { "id": "fillon", "position": "right" }, { "id": "mediapart", "position": "left" } ] }, "cell-2": { "location": "tv", "characters": [ { "id": "mediapart" } ] }, "cell-3": { "location": "tribunal", "characters": [ { "id": "fillon" } ] } }
+    {
+      "cell-1": {
+        "location": "enquete",
+        "characters": [
+          { "id": "fillion" },
+          { "id": "fillon", "position": "right" },
+          { "id": "mediapart", "position": "left" }
+        ]
+      },
+      "cell-2": { "location": "tv", "characters": [{ "id": "mediapart" }] },
+      "cell-3": { "location": "tribunal", "characters": [{ "id": "fillon" }] }
+    }
   ]
-  }
+}

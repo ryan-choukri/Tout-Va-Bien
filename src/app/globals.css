@@ -1,9 +1,8 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 
 :root {
   --background: #ffffff;
@@ -35,16 +34,14 @@ body {
   @apply bg-gray-900 text-white;
 } */
 
-
-
 /* This is global styles for the game container and elements */
 /* game-container is the main wrapper for the game grid and elements */
 .game-container {
-  width: 100%!important;
+  width: 100% !important;
   background-color: #18181b; /* zinc-900 */
-  color: #e4e4e7;           /* zinc-200 */
+  color: #e4e4e7; /* zinc-200 */
   border-radius: 1rem;
-  font-family: monospace
+  font-family: monospace;
 }
 
 .victory-game {
@@ -85,43 +82,38 @@ body {
 /* LOCATIONS — pastel paper, soft but structured */
 .card-location-deck,
 .card-location-board {
-    z-index: 8;
-    font-weight: 700;
-  color: #1f1f23;               /* slightly softer than pure black */
+  z-index: 8;
+  font-weight: 700;
+  color: #1f1f23; /* slightly softer than pure black */
   /* box-shadow: -1px 2px 4px 2px #31313154; */
 }
 
 /* CHARACTERS — authority, depth, presence */
 .card-character-deck,
 .card-character-board {
-      z-index: 10;
+  z-index: 10;
   color: #ffffff;
   font-weight: 700;
   border-radius: 90rem;
   /* box-shadow:-1px 2px 4px 2px #31313154; */
 }
 
-
 /* bord-cells and hover-bord-cells are the styles for the cells on the board */
 .bord-cells {
   background-color: #27272a; /* zinc-800 */
-  color: #d4d4d8;           /* zinc-300 */
+  color: #d4d4d8; /* zinc-300 */
 }
 
 .hover-bord-cells {
   background-color: #3f3f46; /* zinc-700 */
-  color: #fafafa;           /* zinc-50 */
+  color: #fafafa; /* zinc-50 */
 }
 
 /* deck is the style for the deck container */
 .deck {
   /* background-color: #27272a; */
-  color: #d4d4d8;           /* zinc-300 */
+  color: #d4d4d8; /* zinc-300 */
 }
-
-
-
-
 
 .game-container {
   /* transform-origin: top center; */
@@ -147,4 +139,3 @@ body {
     aspect-ratio: auto;
   }
 }
-

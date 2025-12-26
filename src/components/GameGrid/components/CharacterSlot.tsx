@@ -1,37 +1,37 @@
-import { Level } from "../../types";
-import { useDroppable } from "@dnd-kit/core";
-import { CharacterCard } from "./CharacterCard";
-import { DisplayCardImg } from "./DisplayCardImg";
+import { Level } from '../../types';
+import { useDroppable } from '@dnd-kit/core';
+import { CharacterCard } from './CharacterCard';
+import { DisplayCardImg } from './DisplayCardImg';
 
-export function CharacterSlot({ 
-    type,
-    level,
-  cellId, 
-  position, 
-  character 
-}: { 
-  type: "location" | "character";
-    level: Level;
-  cellId: string; 
-  position: "left" | "right";
-  character?: { id: string; position?: "left" | "right" };
+export function CharacterSlot({
+  type,
+  level,
+  cellId,
+  position,
+  character,
+}: {
+  type: 'location' | 'character';
+  level: Level;
+  cellId: string;
+  position: 'left' | 'right';
+  character?: { id: string; position?: 'left' | 'right' };
 }) {
-  const { isOver, setNodeRef } = useDroppable({ 
+  const { isOver, setNodeRef } = useDroppable({
     id: `${cellId}-${position}`,
-    data: { position, cellId }
+    data: { position, cellId },
   });
 
   const getCardDetails = (cardId: string) => {
     const allCards = [...level.cardsCaracter, ...level.cardsPlace];
-    return allCards.find(c => c.id === cardId);
+    return allCards.find((c) => c.id === cardId);
   };
 
   const card = character ? getCardDetails(character.id) : null;
-  
+
   return (
     <div
       ref={setNodeRef}
-      className={`flex-1 rounded min-h-[3rem] flex items-center justify-center transition-all`}
+      className={`flex min-h-[3rem] flex-1 items-center justify-center rounded transition-all`}
     >
       {character ? (
         <CharacterCard
@@ -56,7 +56,6 @@ export function CharacterSlot({
               <>{card?.label || character.id}
               </>
           )} */}
-
         </CharacterCard>
       ) : (
         <span className="text-xs text-gray-500 capitalize">{position}</span>

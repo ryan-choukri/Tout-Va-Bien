@@ -1,14 +1,13 @@
-
 {
   "id": "level_storyteller_06",
   "shortTitle": "Sarko en prison !",
   "title": "Met Sarko en prison !",
   "cells": 4,
   "cardsCaracter": [
-    { "id": "kadafi", "label": "Kadafi", "type": "character" } ,
-    { "id": "sarko", "label": "Sarko", "type": "character" } ,
-     { "id": "mediapart", "label": "Mediapart", "type": "character" } 
-    ],
+    { "id": "kadafi", "label": "Kadafi", "type": "character" },
+    { "id": "sarko", "label": "Sarko", "type": "character" },
+    { "id": "mediapart", "label": "Mediapart", "type": "character" }
+  ],
   "cardsPlace": [
     {
       "id": "reunion",
@@ -16,7 +15,7 @@
       "type": "location",
       "slots": {
         "maxCharacters": 2,
-                "positions": ["left", "right"],
+        "positions": ["left", "right"],
         "rules": "Lors d'une réunion, un personnage peut convaincre un autre personnage de soutenir sa cause"
       }
     },
@@ -48,8 +47,43 @@
         "rules": "Au tribunal, un personnage peut être condamné"
       }
     }
-    ],
+  ],
   "victoryStates": [
-    { "cell-4": { "location": "tribunal", "characters": [ { "id": "sarko" } ] }, "cell-3": { "location": "tv", "characters": [ { "id": "mediapart" } ] }, "cell-2": { "location": "enquete", "characters": [ { "id": "mediapart", "position": "left" }, { "id": "sarko", "position": "right" } ] }, "cell-1": { "location": "reunion", "characters": [ { "id": "sarko", "position": "left" }, { "id": "kadafi", "position": "right" } ] } },
-{ "cell-4": { "location": "tribunal", "characters": [ { "id": "sarko" } ] }, "cell-3": { "location": "tv", "characters": [ { "id": "mediapart" } ] }, "cell-2": { "location": "enquete", "characters": [ { "id": "mediapart", "position": "left" }, { "id": "sarko", "position": "right" } ] }, "cell-1": { "location": "reunion", "characters": [ { "id": "kadafi", "position": "left" }, { "id": "sarko", "position": "right" } ] } }  ]
+    {
+      "cell-4": { "location": "tribunal", "characters": [{ "id": "sarko" }] },
+      "cell-3": { "location": "tv", "characters": [{ "id": "mediapart" }] },
+      "cell-2": {
+        "location": "enquete",
+        "characters": [
+          { "id": "mediapart", "position": "left" },
+          { "id": "sarko", "position": "right" }
+        ]
+      },
+      "cell-1": {
+        "location": "reunion",
+        "characters": [
+          { "id": "sarko", "position": "left" },
+          { "id": "kadafi", "position": "right" }
+        ]
+      }
+    },
+    {
+      "cell-4": { "location": "tribunal", "characters": [{ "id": "sarko" }] },
+      "cell-3": { "location": "tv", "characters": [{ "id": "mediapart" }] },
+      "cell-2": {
+        "location": "enquete",
+        "characters": [
+          { "id": "mediapart", "position": "left" },
+          { "id": "sarko", "position": "right" }
+        ]
+      },
+      "cell-1": {
+        "location": "reunion",
+        "characters": [
+          { "id": "kadafi", "position": "left" },
+          { "id": "sarko", "position": "right" }
+        ]
+      }
+    }
+  ]
 }

@@ -9,13 +9,13 @@
     { "id": "entreprise", "label": "Entreprise Polluante", "type": "character" }
   ],
   "cardsPlace": [
-        {
+    {
       "id": "reunion",
       "label": "Réunion",
       "type": "location",
       "slots": {
         "maxCharacters": 2,
-                "positions": ["left", "right"],
+        "positions": ["left", "right"],
         "rules": "Lors d'une réunion, un personnage peut convaincre un autre personnage de soutenir sa cause"
       }
     },
@@ -30,86 +30,85 @@
     }
   ],
   "victoryStates": [
-
-  {
-    "cell-3": {
-      "location": "assemblée",
-      "characters": [{ "id": "ministre" }]
+    {
+      "cell-3": {
+        "location": "assemblée",
+        "characters": [{ "id": "ministre" }]
+      },
+      "cell-2": {
+        "location": "reunion",
+        "characters": [
+          { "id": "ministre", "position": "left" },
+          { "id": "lobby", "position": "right" }
+        ]
+      },
+      "cell-1": {
+        "location": "reunion",
+        "characters": [
+          { "id": "entreprise", "position": "left" },
+          { "id": "lobby", "position": "right" }
+        ]
+      }
     },
-    "cell-2": {
-      "location": "reunion",
-      "characters": [
-        { "id": "ministre", "position": "left" },
-        { "id": "lobby", "position": "right" }
-      ]
+    {
+      "cell-3": {
+        "location": "assemblée",
+        "characters": [{ "id": "ministre" }]
+      },
+      "cell-2": {
+        "location": "reunion",
+        "characters": [
+          { "id": "lobby", "position": "left" },
+          { "id": "ministre", "position": "right" }
+        ]
+      },
+      "cell-1": {
+        "location": "reunion",
+        "characters": [
+          { "id": "entreprise", "position": "left" },
+          { "id": "lobby", "position": "right" }
+        ]
+      }
     },
-    "cell-1": {
-      "location": "reunion",
-      "characters": [
-        { "id": "entreprise", "position": "left" },
-        { "id": "lobby", "position": "right" }
-      ]
+    {
+      "cell-3": {
+        "location": "assemblée",
+        "characters": [{ "id": "ministre" }]
+      },
+      "cell-2": {
+        "location": "reunion",
+        "characters": [
+          { "id": "ministre", "position": "left" },
+          { "id": "lobby", "position": "right" }
+        ]
+      },
+      "cell-1": {
+        "location": "reunion",
+        "characters": [
+          { "id": "lobby", "position": "left" },
+          { "id": "entreprise", "position": "right" }
+        ]
+      }
+    },
+    {
+      "cell-3": {
+        "location": "assemblée",
+        "characters": [{ "id": "ministre" }]
+      },
+      "cell-2": {
+        "location": "reunion",
+        "characters": [
+          { "id": "lobby", "position": "left" },
+          { "id": "ministre", "position": "right" }
+        ]
+      },
+      "cell-1": {
+        "location": "reunion",
+        "characters": [
+          { "id": "lobby", "position": "left" },
+          { "id": "entreprise", "position": "right" }
+        ]
+      }
     }
-  },
-  {
-    "cell-3": {
-      "location": "assemblée",
-      "characters": [{ "id": "ministre" }]
-    },
-    "cell-2": {
-      "location": "reunion",
-      "characters": [
-        { "id": "lobby", "position": "left" },
-        { "id": "ministre", "position": "right" }
-      ]
-    },
-    "cell-1": {
-      "location": "reunion",
-      "characters": [
-        { "id": "entreprise", "position": "left" },
-        { "id": "lobby", "position": "right" }
-      ]
-    }
-  },
-  {
-    "cell-3": {
-      "location": "assemblée",
-      "characters": [{ "id": "ministre" }]
-    },
-    "cell-2": {
-      "location": "reunion",
-      "characters": [
-        { "id": "ministre", "position": "left" },
-        { "id": "lobby", "position": "right" }
-      ]
-    },
-    "cell-1": {
-      "location": "reunion",
-      "characters": [
-        { "id": "lobby", "position": "left" },
-        { "id": "entreprise", "position": "right" }
-      ]
-    }
-  },
-  {
-    "cell-3": {
-      "location": "assemblée",
-      "characters": [{ "id": "ministre" }]
-    },
-    "cell-2": {
-      "location": "reunion",
-      "characters": [
-        { "id": "lobby", "position": "left" },
-        { "id": "ministre", "position": "right" }
-      ]
-    },
-    "cell-1": {
-      "location": "reunion",
-      "characters": [
-        { "id": "lobby", "position": "left" },
-        { "id": "entreprise", "position": "right" }
-      ]
-    }
-  }
-
-    ]}
+  ]
+}

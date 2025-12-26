@@ -5,7 +5,8 @@
   "cells": 2,
   "cardsCaracter": [
     { "id": "macron", "label": "Macron", "type": "character" },
-    { "id": "melenchon", "label": "Mélenchon", "type": "character" }  ],
+    { "id": "melenchon", "label": "Mélenchon", "type": "character" }
+  ],
   "cardsPlace": [
     {
       "id": "eviction",
@@ -28,7 +29,15 @@
     }
   ],
   "victoryStates": [
-{ "cell-2": { "location": "eviction", "characters": [ { "id": "macron", "position": "right" }, { "id": "melenchon", "position": "left" } ] }, "cell-1": { "location": "popularite", "characters": [ { "id": "melenchon" } ] } }
+    {
+      "cell-2": {
+        "location": "eviction",
+        "characters": [
+          { "id": "macron", "position": "right" },
+          { "id": "melenchon", "position": "left" }
+        ]
+      },
+      "cell-1": { "location": "popularite", "characters": [{ "id": "melenchon" }] }
+    }
   ]
-  }
-
+}
