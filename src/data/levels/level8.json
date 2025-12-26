@@ -1,0 +1,31 @@
+{
+  "id": "level_storyteller_08",
+  "shortTitle": "DEBUG level",
+  "title": "Du bêtisier à la révolte : le peuple s’éduque !",
+  "cells": 6,
+  "cardsCaracter": [
+    { "id": "macron", "label": "Macron", "type": "character" },
+    { "id": "melenchon", "label": "Mélenchon", "type": "character" },
+    { "id": "lepen", "label": "Le Pen", "type": "character" },
+    { "id": "peuple", "label": "Peuple", "type": "character" },
+    { "id": "lobby", "label": "Lobby", "type": "character" },
+    { "id": "ministre", "label": "ministre", "type": "character" },
+        { "id": "kadafi", "label": "Kadafi", "type": "character" } ,
+    { "id": "sarko", "label": "Sarko", "type": "character" } ,
+     { "id": "mediapart", "label": "Mediapart", "type": "character" },
+    { "id": "fillon", "label": "Fillon", "type": "character" },
+    { "id": "entreprise", "label": "Entreprise Polluante", "type": "character" }
+      ],
+  "cardsPlace": [
+    {
+      "id": "manifestation",
+      "label": "Manifestation",
+      "type": "location",
+      "slots": { "maxCharacters": 1, "rules": "Peuple peut s’opposer à un personnage" }
+    }
+
+  ],
+  "victoryStates": [
+    { "cell-4": { "location": "eviction", "characters": [ { "id": "peuple", "position": "left" }, { "id": "ministre", "position": "right" } ] }, "cell-3": { "location": "manifestation", "characters": [ { "id": "peuple" } ] }, "cell-2": { "location": "école", "characters": [ { "id": "peuple" } ] }, "cell-1": { "location": "émission", "characters": [ { "id": "peuple" } ] } }
+  ]
+}

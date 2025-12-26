@@ -1,5 +1,4 @@
 import { useDraggable } from '@dnd-kit/core';
-
 export function LocationCard({ 
   instanceId, 
   cardId,
@@ -27,7 +26,7 @@ export function LocationCard({
       style={style}
       {...listeners}
       {...attributes}
-      className="min-h-[5rem] card-location-board text-white w-full p-2 rounded cursor-grab active:cursor-grabbing select-none transition-opacity touch-none"
+      className="min-h-[5.5rem] card-location-board text-white w-full py-0! p-2 rounded cursor-grab active:cursor-grabbing select-none transition-opacity touch-none"
     >
       {children}
     </div>

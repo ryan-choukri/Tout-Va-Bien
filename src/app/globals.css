@@ -43,6 +43,8 @@ body {
   width: 100%!important;
   background-color: #18181b; /* zinc-900 */
   color: #e4e4e7;           /* zinc-200 */
+  border-radius: 1rem;
+  font-family: monospace
 }
 
 .victory-game {
@@ -85,19 +87,18 @@ body {
 .card-location-board {
     z-index: 8;
     font-weight: 700;
-  background-color: #ffcfda;
   color: #1f1f23;               /* slightly softer than pure black */
-  box-shadow: -1px 2px 4px 2px #31313154;
+  /* box-shadow: -1px 2px 4px 2px #31313154; */
 }
 
 /* CHARACTERS — authority, depth, presence */
 .card-character-deck,
 .card-character-board {
-  z-index: 10;
-  background-color: #144e48;
+      z-index: 10;
   color: #ffffff;
   font-weight: 700;
-  box-shadow:-1px 2px 4px 2px #31313154;
+  border-radius: 90rem;
+  /* box-shadow:-1px 2px 4px 2px #31313154; */
 }
 
 

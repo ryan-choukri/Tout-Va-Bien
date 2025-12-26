@@ -5,7 +5,7 @@
   "cells": 4,
   "cardsCaracter": [
     { "id": "peuple", "label": "Peuple", "type": "character" },
-    { "id": "1er ministre", "label": "Ministre", "type": "character" }  ],
+    { "id": "ministre", "label": "Ministre", "type": "character" }  ],
   "cardsPlace": [
     {
       "id": "manifestation",
@@ -38,6 +38,6 @@
 
   ],
   "victoryStates": [
-    { "cell-4": { "location": "eviction", "characters": [ { "id": "peuple", "position": "left" }, { "id": "1er ministre", "position": "right" } ] }, "cell-3": { "location": "manifestation", "characters": [ { "id": "peuple" } ] }, "cell-2": { "location": "école", "characters": [ { "id": "peuple" } ] }, "cell-1": { "location": "émission", "characters": [ { "id": "peuple" } ] } }
+    { "cell-4": { "location": "eviction", "characters": [ { "id": "peuple", "position": "left" }, { "id": "ministre", "position": "right" } ] }, "cell-3": { "location": "manifestation", "characters": [ { "id": "peuple" } ] }, "cell-2": { "location": "école", "characters": [ { "id": "peuple" } ] }, "cell-1": { "location": "émission", "characters": [ { "id": "peuple" } ] } }
   ]
 }

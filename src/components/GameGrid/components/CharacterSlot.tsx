@@ -1,14 +1,16 @@
 import { Level } from "../../types";
 import { useDroppable } from "@dnd-kit/core";
 import { CharacterCard } from "./CharacterCard";
-
+import { DisplayCardImg } from "./DisplayCardImg";
 
 export function CharacterSlot({ 
+    type,
     level,
   cellId, 
   position, 
   character 
 }: { 
+  type: "location" | "character";
     level: Level;
   cellId: string; 
   position: "left" | "right";
@@ -32,13 +34,29 @@ export function CharacterSlot({
       className={`flex-1 rounded min-h-[3rem] flex items-center justify-center transition-all`}
     >
       {character ? (
-        <CharacterCard 
+        <CharacterCard
           instanceId={`${cellId}-${character.id}-${position}`}
           cardId={character.id}
           cellId={cellId}
           position={position}
         >
-          {card?.label || character.id}
+          {DisplayCardImg(card)}
+          {/* {type === "character" ? (
+          <>
+          <div className="absolute bottom-0 mb-4">
+            <Image
+              src={avatar || "/placeholder.png"}
+              alt={"Character Image"}
+              width={50}
+              height={50}
+            />
+          </div>
+          <p className="absolute bottom-0"> {card?.label}</p>
+        </>) : (
+              <>{card?.label || character.id}
+              </>
+          )} */}
+
         </CharacterCard>
       ) : (
         <span className="text-xs text-gray-500 capitalize">{position}</span>

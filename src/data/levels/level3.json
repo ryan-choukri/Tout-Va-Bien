@@ -5,7 +5,7 @@
   "cells": 3,
   "cardsCaracter": [
     { "id": "lobby", "label": "Lobby", "type": "character" },
-    { "id": "1er ministre", "label": "ministre", "type": "character" },
+    { "id": "ministre", "label": "ministre", "type": "character" },
     { "id": "entreprise", "label": "Entreprise Polluante", "type": "character" }
   ],
   "cardsPlace": [
@@ -34,12 +34,12 @@
   {
     "cell-3": {
       "location": "assemblée",
-      "characters": [{ "id": "1er ministre" }]
+      "characters": [{ "id": "ministre" }]
     },
     "cell-2": {
       "location": "reunion",
       "characters": [
-        { "id": "1er ministre", "position": "left" },
+        { "id": "ministre", "position": "left" },
         { "id": "lobby", "position": "right" }
       ]
     },
@@ -54,13 +54,13 @@
   {
     "cell-3": {
       "location": "assemblée",
-      "characters": [{ "id": "1er ministre" }]
+      "characters": [{ "id": "ministre" }]
     },
     "cell-2": {
       "location": "reunion",
       "characters": [
         { "id": "lobby", "position": "left" },
-        { "id": "1er ministre", "position": "right" }
+        { "id": "ministre", "position": "right" }
       ]
     },
     "cell-1": {
@@ -74,12 +74,12 @@
   {
     "cell-3": {
       "location": "assemblée",
-      "characters": [{ "id": "1er ministre" }]
+      "characters": [{ "id": "ministre" }]
     },
     "cell-2": {
       "location": "reunion",
       "characters": [
-        { "id": "1er ministre", "position": "left" },
+        { "id": "ministre", "position": "left" },
         { "id": "lobby", "position": "right" }
       ]
     },
@@ -94,13 +94,13 @@
   {
     "cell-3": {
       "location": "assemblée",
-      "characters": [{ "id": "1er ministre" }]
+      "characters": [{ "id": "ministre" }]
     },
     "cell-2": {
       "location": "reunion",
       "characters": [
         { "id": "lobby", "position": "left" },
-        { "id": "1er ministre", "position": "right" }
+        { "id": "ministre", "position": "right" }
       ]
     },
     "cell-1": {

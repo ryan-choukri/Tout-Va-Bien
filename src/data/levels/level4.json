@@ -5,8 +5,8 @@
   "cells": 5,
   "cardsCaracter": [
     { "id": "lobby", "label": "Lobby", "type": "character" },
-    { "id": "1er ministre", "label": "ministre", "type": "character" },
-    { "id": "entreprise", "label": "Entreprise Polluante", "type": "character" }
+    { "id": "ministre", "label": "Ministre", "type": "character" },
+    { "id": "entreprise", "label": "Polluante", "type": "character" }
   ],
   "cardsPlace": [
       {
@@ -40,5 +40,5 @@
     }
   ],
   "victoryStates": [
-{ "cell-1": { "location": "reunion", "characters": [ { "id": "entreprise", "position": "right" }, { "id": "lobby", "position": "left" } ] }, "cell-2": { "location": "reunion", "characters": [ { "id": "lobby", "position": "left" }, { "id": "1er ministre", "position": "right" } ] }, "cell-3": { "location": "assemblée", "characters": [ { "id": "1er ministre" } ] }, "cell-4": { "location": "manifestation", "characters": [ { "id": "1er ministre" } ] }, "cell-5": { "location": "assemblée", "characters": [ { "id": "lobby" } ] } }
+{ "cell-1": { "location": "reunion", "characters": [ { "id": "entreprise", "position": "right" }, { "id": "lobby", "position": "left" } ] }, "cell-2": { "location": "reunion", "characters": [ { "id": "lobby", "position": "left" }, { "id": "ministre", "position": "right" } ] }, "cell-3": { "location": "assemblée", "characters": [ { "id": "ministre" } ] }, "cell-4": { "location": "manifestation", "characters": [ { "id": "ministre" } ] }, "cell-5": { "location": "assemblée", "characters": [ { "id": "lobby" } ] } }
 ]}
