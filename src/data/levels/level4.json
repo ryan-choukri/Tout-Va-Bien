@@ -57,7 +57,7 @@
       },
       "cell-3": { "location": "assemblée", "characters": [{ "id": "ministre" }] },
       "cell-4": { "location": "manifestation", "characters": [{ "id": "ministre" }] },
-      "cell-5": { "location": "assemblée", "characters": [{ "id": "lobby" }] }
+      "cell-5": { "location": "assemblée", "characters": [{ "id": "ministre" }] }
     }
   ]
 }

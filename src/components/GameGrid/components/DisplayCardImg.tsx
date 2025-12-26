@@ -6,8 +6,6 @@ export function DisplayCardImg(
   card: Card | undefined | null,
   style?: React.CSSProperties
 ): JSX.Element | null {
-  console.log(card);
-
   return card && card.type === 'character' ? (
     <>
       <div style={style ? style : { bottom: '0px' }} className="absolute mb-2">

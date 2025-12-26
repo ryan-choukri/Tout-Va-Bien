@@ -36,6 +36,7 @@ export type VictoryStatus = {
   achieved: boolean; // true si une condition de victoire est atteinte
   index?: number; // index du tableau victoryStates correspondant
   matchedState?: BoardState; // l'état du board qui a déclenché la victoire
+  nbOferrors?: number;
 };
 
 export type VictoryStateDisplayProps = {

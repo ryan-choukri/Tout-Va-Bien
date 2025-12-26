@@ -2,8 +2,6 @@
 
 import {
   DndContext,
-  useDraggable,
-  useDroppable,
   DragEndEvent,
   DragStartEvent,
   DragOverlay,
@@ -26,10 +24,14 @@ import {
   BoardState,
   Card,
   Level,
-  DebugJSONProps,
   VictoryStatus,
   VictoryStateDisplayProps,
 } from '@/components/types';
+
+type VictoryCheckResult = {
+  location: boolean;
+  characters: boolean;
+};
 
 // const level: Level = levelData as Level;
 
@@ -98,11 +100,42 @@ function areCharactersEqual(
 }
 
 // Fonction de check de victoire
-function checkVictory({ boardState, level }: { boardState: BoardState; level: Level }): number {
+function checkVictory({ boardState, level }: { boardState: BoardState; level: Level }): {
+  victoryIndex: number;
+  arrayOfVictoryPos: VictoryCheckResult[][];
+} {
   // Parcours toutes les conditions de victoire
+  let currentVictoryIndex = -1;
+  const arrayOfVictoryPos: VictoryCheckResult[][] = [];
   for (const victoryState of level.victoryStates) {
     let matched = true;
-    let currentVictoryIndex = -1;
+    // closeVictoryIndex is an array set with index as number of index
+    console.log('-----------PASSAGE POUR EACHH---------');
+
+    const countPlacementErrors =
+      () =>
+      ([vicKey, val]: [
+        string,
+        {
+          location: string;
+          characters: { id: string; position?: string }[];
+        },
+      ]) => {
+        const isLocationMatch = boardState[vicKey] && boardState[vicKey].location === val.location;
+        const isCharacterMatch = val.characters.some(
+          (vicChar) =>
+            (boardState[vicKey]?.characters &&
+              boardState[vicKey].characters.some(
+                (boardChar) =>
+                  boardChar.id === vicChar.id && boardChar.position === vicChar.position
+              )) ||
+            false
+        );
+        return { location: isLocationMatch || false, characters: isCharacterMatch };
+      };
+
+    arrayOfVictoryPos.push(Object.entries(victoryState).map(countPlacementErrors()));
+    // .reduce((a, b) => (b ? a + 1 : a), 0);
 
     for (const cellId in victoryState) {
       const target = victoryState[cellId];
@@ -113,11 +146,12 @@ function checkVictory({ boardState, level }: { boardState: BoardState; level: Le
         matched = false;
         currentVictoryIndex = level.victoryStates.indexOf(victoryState);
         break;
+        // ++closeVictoryIndex[level.victoryStates.indexOf(victoryState)];
       }
-
       // Vérifie que les personnages sont identiques
       if (!areCharactersEqual(target.characters, current.characters || [])) {
         matched = false;
+        // ++closeVictoryIndex[level.victoryStates.indexOf(victoryState)];
         currentVictoryIndex = level.victoryStates.indexOf(victoryState);
         break;
       }
@@ -125,11 +159,12 @@ function checkVictory({ boardState, level }: { boardState: BoardState; level: Le
     }
 
     if (matched) {
-      return currentVictoryIndex; // une condition de victoire est atteinte
+      break; // une condition de victoire est atteinte
     }
+    currentVictoryIndex = -1;
   }
 
-  return -1; // aucune condition de victoire atteinte
+  return { victoryIndex: currentVictoryIndex, arrayOfVictoryPos }; // aucune condition de victoire atteinte
 }
 
 export default function GameGrid({
@@ -158,6 +193,7 @@ export default function GameGrid({
     achieved: false,
     index: undefined,
     matchedState: undefined,
+    nbOferrors: 0,
   });
   const boardCells = Array.from({ length: level.cells }, (_, i) => `cell-${i + 1}`);
   const deckCharacterCards = level.cardsCaracter;
@@ -252,11 +288,32 @@ export default function GameGrid({
 
     const newBoard = placeCardOnBoard(cardId, targetCellId, sourceCellId, targetPosition);
     // Après chaque action, tu peux faire
-    const currentVictoryIndex = checkVictory({ boardState: newBoard, level }); // ta fonction retourne l'index ou -1
-    if (currentVictoryIndex !== -1) {
-      setVictoryState({ achieved: true, index: currentVictoryIndex });
+    const { victoryIndex, arrayOfVictoryPos } = checkVictory({ boardState: newBoard, level }); // ta fonction retourne l'index ou -1
+    if (victoryIndex !== -1) {
+      setVictoryState({ achieved: true, index: victoryIndex, nbOferrors: 0 });
     } else {
-      setVictoryState({ achieved: false, index: undefined });
+      console.log(arrayOfVictoryPos);
+      const totalOfGoodPos = arrayOfVictoryPos.map((cellsPos) => {
+        return cellsPos
+          .map((cellPos) => {
+            let nbOftruePos = 0;
+            if (cellPos.location) ++nbOftruePos;
+            if (cellPos.characters) ++nbOftruePos;
+            return nbOftruePos;
+          })
+          .reduce((a, b) => a + b, 0);
+      });
+      //get the full deck of cards to know the maximum of positions possible
+      const nbOfCharForVictory = Object.entries(level.victoryStates[0])
+        .map(([key, val]) => 1)
+        .reduce((a, b) => a + b, 0);
+
+      const nbOfLocationForVictory = Object.entries(level.victoryStates[0]).length;
+      const maxOfPos = nbOfCharForVictory + nbOfLocationForVictory;
+      console.log('Max of positions possible: ' + maxOfPos);
+      console.log(totalOfGoodPos);
+      const nbOferrors = maxOfPos - totalOfGoodPos[0];
+      setVictoryState({ achieved: false, index: undefined, nbOferrors });
     }
 
     // Reset active states at the end
@@ -442,6 +499,18 @@ export default function GameGrid({
       >
         <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
           <h2 className="mx-4 mt-3 text-center text-sm text-white">{level.title}</h2>
+          {/* DISPLAY HERE IN ABOSULTE THE nbOferrors */}
+          <div className="absolute top-1">
+            {victoryState.achieved ? (
+              <div className="mx-4 mb-2 text-center text-[8px] text-green-400">
+                🎉 Victoire atteinte !
+              </div>
+            ) : (
+              <div className="mx-4 mb-2 text-center text-[8px] text-red-400">
+                ❌ Positions incorrectes : {victoryState.nbOferrors}
+              </div>
+            )}
+          </div>
 
           {/* Board Grid */}
           <div className="grid min-h-[218px] grid-cols-3 content-center gap-2 px-4 py-2">
