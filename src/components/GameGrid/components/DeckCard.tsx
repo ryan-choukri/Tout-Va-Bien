@@ -34,12 +34,16 @@ export function DeckCard({
       style={customStyle}
       {...listeners}
       {...attributes}
-      className={`${bgColor} flex h-14 w-20 cursor-grab touch-none items-center justify-center rounded p-4 text-xs text-white transition-opacity select-none active:cursor-grabbing`}
-    >
-      {DisplayCardImg(
-        { id: cardId, type, label: children as string },
-        { zIndex: '-14', left: '-1px', bottom: '5px', scale: type === 'location' ? '1.2' : '1' }
-      )}
+      className={`${bgColor} flex h-14 w-20 cursor-grab touch-none items-center justify-center rounded p-4 text-xs text-white transition-opacity select-none active:cursor-grabbing`}>
+      {DisplayCardImg({
+        card: { id: cardId, type, label: children as string },
+        style: {
+          zIndex: '-14',
+          left: '-1px',
+          bottom: '5px',
+          scale: type === 'location' ? '1.2' : '1',
+        },
+      })}
       {}
       {/*       
       {type === "character" ? (

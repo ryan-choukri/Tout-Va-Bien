@@ -31,16 +31,14 @@ export function CharacterSlot({
   return (
     <div
       ref={setNodeRef}
-      className={`flex min-h-[3rem] flex-1 items-center justify-center rounded transition-all`}
-    >
+      className={`flex min-h-[3rem] flex-1 items-center justify-center rounded transition-all`}>
       {character ? (
         <CharacterCard
           instanceId={`${cellId}-${character.id}-${position}`}
           cardId={character.id}
           cellId={cellId}
-          position={position}
-        >
-          {DisplayCardImg(card)}
+          position={position}>
+          {DisplayCardImg({ styleForImage: { height: 54, width: 54 }, card })}
           {/* {type === "character" ? (
           <>
           <div className="absolute bottom-0 mb-4">

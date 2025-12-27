@@ -63,8 +63,7 @@ const VictoriesSetToDebug = ({
           <div key={index}>
             <button
               className="mt-2 rounded bg-gray-700 px-3 py-1 text-xs text-white transition hover:bg-gray-600"
-              onClick={() => setBoardState(JSON.parse(JSON.stringify(victory)))}
-            >
+              onClick={() => setBoardState(JSON.parse(JSON.stringify(victory)))}>
               Set this as Board State
             </button>
             <div className="mb-4 max-h-[15vh] overflow-auto rounded bg-gray-900 p-2 font-mono text-xs text-green-400">
@@ -74,6 +73,108 @@ const VictoriesSetToDebug = ({
           </div>
         );
       })}
+    </div>
+  );
+};
+
+const LocationCardContent = ({
+  location,
+  characters,
+  hasPositions,
+  level,
+  cellId,
+  getCardDetails,
+}: {
+  location: Card;
+  characters: { id: string; position?: 'left' | 'right' }[];
+  hasPositions: boolean;
+  level?: Level;
+  cellId?: string;
+  getCardDetails: (id: string) => Card | undefined;
+}) => {
+  return (
+    <div className="w-full">
+      {/* Location Label */}
+      <div className="mx-4 mb-2 border-b border-gray-500 text-center text-xs font-semibold text-nowrap">
+        {DisplayCardImg({ card: location })}
+        <span className="ml-2 text-xs opacity-75">
+          ({characters.length}/{location.slots?.maxCharacters || '∞'})
+        </span>
+      </div>
+
+      {/* Characters Section */}
+      {hasPositions ? (
+        <div className="mt-5 flex min-h-[2rem] justify-between gap-2">
+          {/* Left Position */}
+          {level && cellId ? (
+            <CharacterSlot
+              type={characters.length > 0 ? 'character' : 'location'}
+              level={level}
+              cellId={cellId}
+              position="left"
+              character={characters.find((c) => c.position === 'left')}
+            />
+          ) : (
+            <div className="flex flex-1 items-center justify-center">
+              {characters.find((c) => c.position === 'left') ? (
+                <div className="card-character-board flex h-10 w-14 items-center justify-center rounded text-xs text-white">
+                  {DisplayCardImg({
+                    styleForImage: { height: 54, width: 54 },
+                    card: getCardDetails(characters.find((c) => c.position === 'left')!.id),
+                  })}
+                </div>
+              ) : (
+                <span className="text-xs text-gray-500">L</span>
+              )}
+            </div>
+          )}
+
+          {/* Right Position */}
+          {level && cellId ? (
+            <CharacterSlot
+              type={characters.length > 0 ? 'character' : 'location'}
+              level={level}
+              cellId={cellId}
+              position="right"
+              character={characters.find((c) => c.position === 'right')}
+            />
+          ) : (
+            <div className="flex flex-1 items-center justify-center">
+              {characters.find((c) => c.position === 'right') ? (
+                <div className="card-character-board flex h-10 w-14 items-center justify-center rounded text-xs text-white">
+                  {DisplayCardImg({
+                    styleForImage: { height: 54, width: 54 },
+                    card: getCardDetails(characters.find((c) => c.position === 'right')!.id),
+                  })}
+                </div>
+              ) : (
+                <span className="text-xs text-gray-500">R</span>
+              )}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="mt-5 flex min-h-[2rem] flex-wrap justify-center gap-1">
+          {characters.map((char) => {
+            const card = getCardDetails(char.id);
+            return level && cellId ? (
+              <CharacterCard
+                key={`${cellId}-${char.id}`}
+                instanceId={`${cellId}-${char.id}`}
+                cardId={char.id}
+                cellId={cellId}>
+                {DisplayCardImg({ styleForImage: { height: 54, width: 54 }, card: card })}
+              </CharacterCard>
+            ) : (
+              <div
+                key={char.id}
+                className="card-character-board flex h-10 w-14 items-center justify-center rounded text-xs text-white">
+                {DisplayCardImg({ styleForImage: { height: 54, width: 54 }, card: card })}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };
@@ -495,8 +596,7 @@ export default function GameGrid({
   return (
     <>
       <div
-        className={`game-container flex flex-col rounded-xl shadow-lg ${victoryState.achieved ? 'victory-game' : ''}`}
-      >
+        className={`game-container flex flex-col rounded-xl shadow-lg ${victoryState.achieved ? 'victory-game' : ''}`}>
         <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
           <h2 className="mx-4 mt-3 text-center text-sm text-white">{level.title}</h2>
           {/* DISPLAY HERE IN ABOSULTE THE nbOferrors */}
@@ -518,8 +618,9 @@ export default function GameGrid({
               const cellData = boardState[cellId];
               const location = cellData?.location ? getCardDetails(cellData.location) : null;
               const characters = cellData?.characters || [];
-              const hasPositions =
-                location?.slots?.positions && location.slots.positions.length > 0;
+              const hasPositions = !!(
+                location?.slots?.positions && location.slots.positions.length > 0
+              );
 
               return (
                 <BoardCell key={cellId} id={cellId}>
@@ -527,58 +628,15 @@ export default function GameGrid({
                     <LocationCard
                       instanceId={`${cellId}-${location.id}`}
                       cardId={location.id}
-                      cellId={cellId}
-                    >
-                      <div className="w-full">
-                        {/* Location Label */}
-                        <div className="mx-4 mb-2 border-b border-gray-500 text-center text-xs font-semibold text-nowrap">
-                          {/* {location.label} */}
-                          {DisplayCardImg(location)}
-
-                          <span className="ml-2 text-xs opacity-75">
-                            ({characters.length}/{location.slots?.maxCharacters || '∞'})
-                          </span>
-                        </div>
-
-                        {/* Characters Section */}
-                        {hasPositions ? (
-                          <div className="mt-5 flex min-h-[2rem] justify-between gap-2">
-                            {/* Left Position */}
-                            <CharacterSlot
-                              type={characters.length > 0 ? 'character' : 'location'}
-                              level={level}
-                              cellId={cellId}
-                              position="left"
-                              character={characters.find((c) => c.position === 'left')}
-                            />
-
-                            {/* Right Position */}
-                            <CharacterSlot
-                              type={characters.length > 0 ? 'character' : 'location'}
-                              level={level}
-                              cellId={cellId}
-                              position="right"
-                              character={characters.find((c) => c.position === 'right')}
-                            />
-                          </div>
-                        ) : (
-                          <div className="mt-5 flex min-h-[2rem] flex-wrap justify-center gap-1">
-                            {characters.map((char) => {
-                              const card = getCardDetails(char.id);
-                              return (
-                                <CharacterCard
-                                  key={`${cellId}-${char.id}`}
-                                  instanceId={`${cellId}-${char.id}`}
-                                  cardId={char.id}
-                                  cellId={cellId}
-                                >
-                                  {DisplayCardImg(card)}
-                                </CharacterCard>
-                              );
-                            })}
-                          </div>
-                        )}
-                      </div>
+                      cellId={cellId}>
+                      <LocationCardContent
+                        location={location}
+                        characters={characters}
+                        hasPositions={hasPositions}
+                        level={level}
+                        cellId={cellId}
+                        getCardDetails={getCardDetails}
+                      />
                     </LocationCard>
                   ) : (
                     <div className="flex h-full w-full flex-col items-center justify-center text-center text-xs text-gray-400">
@@ -606,8 +664,7 @@ export default function GameGrid({
                 key={`deck-${card.id}`}
                 instanceId={`deck-${card.id}`}
                 cardId={card.id}
-                type="location"
-              >
+                type="location">
                 {card.label}
               </DeckCard>
             ))}
@@ -617,8 +674,7 @@ export default function GameGrid({
                 key={`deck-${card.id}`}
                 instanceId={`deck-${card.id}`}
                 cardId={card.id}
-                type="character"
-              >
+                type="character">
                 {card.label}
               </DeckCard>
             ))}
@@ -628,97 +684,43 @@ export default function GameGrid({
           <DragOverlay>
             {activeCard ? (
               activeCard.type === 'location' && activeCard.cellData ? (
-                // Show complete location card with characters - FULL SIZE
+                // Show complete location card with characters - Using actual LocationCard component
                 <div
-                  className="card-location-board min-h-[6rem] w-full rotate-4 transform cursor-grabbing rounded p-3 text-white opacity-90 shadow-2xl select-none"
-                  style={{ width: '200px' }}
-                >
-                  <div className="w-full">
-                    {/* Location Label */}
-                    <div className="mx-4 mb-2 border-b border-gray-500 pb-1 text-center text-xs font-semibold text-nowrap">
-                      {/* {activeCard.label} */}
-                      {DisplayCardImg(getCardDetails(activeCard.id), {
-                        zIndex: '-14',
-                        right: '-6px',
-                        left: '-6px',
-                        bottom: '-11px',
-                        scale: '1',
-                      })}
-                      <span className="ml-2 text-xs opacity-75">
-                        ({activeCard.cellData.characters.length}/
-                        {getCardDetails(activeCard.id)?.slots?.maxCharacters || '∞'})
-                      </span>
-                    </div>
-
-                    {/* Characters Section */}
-                    {(() => {
-                      const location = getCardDetails(activeCard.id);
-                      const hasPositions =
-                        location?.slots?.positions && location.slots.positions.length > 0;
-                      const characters = activeCard.cellData.characters;
-
-                      return hasPositions ? (
-                        <div className="flex min-h-[3rem] justify-between">
-                          {/* Left Position */}
-                          <div className="mt-3 flex flex-1 items-center justify-center">
-                            {characters.find((c) => c.position === 'left') ? (
-                              <div className="card-character-board flex h-12 w-16 items-center justify-center rounded text-xs text-white">
-                                {DisplayCardImg(
-                                  getCardDetails(characters.find((c) => c.position === 'left')!.id)
-                                )}
-                              </div>
-                            ) : (
-                              <span className="text-xs text-gray-500">L</span>
-                            )}
-                          </div>
-
-                          {/* Right Position */}
-                          <div className="mt-3 flex flex-1 items-center justify-center">
-                            {characters.find((c) => c.position === 'right') ? (
-                              <div className="card-character-board flex h-12 w-16 items-center justify-center rounded text-xs text-white">
-                                {DisplayCardImg(
-                                  getCardDetails(characters.find((c) => c.position === 'right')!.id)
-                                )}
-
-                                {/* {getCardDetails(characters.find(c => c.position === "right")!.id)?.label} */}
-                              </div>
-                            ) : (
-                              <span className="text-xs text-gray-500">R</span>
-                            )}
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="mt-5 flex min-h-[2rem] flex-wrap justify-center gap-1">
-                          {characters.map((char) => {
-                            const card = getCardDetails(char.id);
-                            return (
-                              <div
-                                key={char.id}
-                                className="card-character-board flex h-12 w-16 items-center justify-center rounded text-xs text-white"
-                              >
-                                {DisplayCardImg(card)}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      );
-                    })()}
-                  </div>
+                  className="rotate-4 transform cursor-grabbing opacity-90 shadow-2xl"
+                  style={{ width: '200px' }}>
+                  <LocationCard
+                    instanceId={`drag-${activeCard.id}`}
+                    cardId={activeCard.id}
+                    cellId="drag-overlay">
+                    <LocationCardContent
+                      location={getCardDetails(activeCard.id)!}
+                      characters={activeCard.cellData.characters}
+                      hasPositions={
+                        !!(
+                          getCardDetails(activeCard.id)?.slots?.positions &&
+                          getCardDetails(activeCard.id)!.slots!.positions!.length > 0
+                        )
+                      }
+                      getCardDetails={getCardDetails}
+                    />
+                  </LocationCard>
                 </div>
               ) : (
                 // Simple card for characters and deck locations
                 <div
-                  className={` ${activeCard.type === 'location' ? 'card-location-deck' : 'card-character-deck'} flex rotate-7 transform cursor-grabbing items-center justify-center rounded text-xs text-white opacity-90 shadow-2xl transition-all duration-75 select-none ${activeCard.type === 'location' ? 'h-14 w-20' : 'h-14 w-20'} `}
-                >
+                  className={` ${activeCard.type === 'location' ? 'card-location-deck' : 'card-character-deck'} flex rotate-7 transform cursor-grabbing items-center justify-center rounded text-xs text-white opacity-90 shadow-2xl transition-all duration-75 select-none ${activeCard.type === 'location' ? 'h-14 w-20' : 'h-14 w-20'} `}>
                   {activeCard.type === 'character' ? (
-                    DisplayCardImg(getCardDetails(activeCard.id))
+                    DisplayCardImg({ card: getCardDetails(activeCard.id) })
                   ) : (
                     <>
-                      {DisplayCardImg(getCardDetails(activeCard.id), {
-                        zIndex: '-14',
-                        left: '-1px',
-                        bottom: '5px',
-                        scale: '1.2',
+                      {DisplayCardImg({
+                        card: getCardDetails(activeCard.id),
+                        style: {
+                          zIndex: '-14',
+                          left: '-1px',
+                          bottom: '5px',
+                          scale: '1.2',
+                        },
                       })}
                     </>
                   )}
