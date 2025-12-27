@@ -42,7 +42,6 @@
       "cell-1": {
         "location": "enquete",
         "characters": [
-          { "id": "fillion" },
           { "id": "fillon", "position": "right" },
           { "id": "mediapart", "position": "left" }
         ]
