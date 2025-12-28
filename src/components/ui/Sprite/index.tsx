@@ -80,7 +80,7 @@ export function Sprite({ id, size = { height: 81, width: 81 } }: CharacterSprite
           }}
         />
       ) : (
-        <Image src={`/characters/${id}.png`} alt={id} {...{ size }} />
+        <Image src={`/characters/${id}.png`} alt={id} width={size.width} height={size.height} />
       )}
     </>
   );

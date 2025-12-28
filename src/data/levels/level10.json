@@ -1,0 +1,63 @@
+{
+  "id": "level_storyteller_10",
+  "shortTitle": "Zemmour Le Raciste",
+  "title": "Zemmour le raciste",
+  "cells": 4,
+  "cardsCaracter": [
+    { "id": "zemmour", "label": "Zemmour", "type": "character" },
+    { "id": "mediapart", "label": "Mediapart", "type": "character" }
+  ],
+  "cardsPlace": [
+    {
+      "id": "parlementeurope",
+      "label": "Parlement Européen",
+      "type": "location",
+      "slots": {
+        "maxCharacters": 1,
+        "rules": "Au Parlement Européen, un personnage peut faire passer une loi"
+      }
+    },
+    {
+      "id": "enquete",
+      "label": "Enquete",
+      "type": "location",
+      "slots": {
+        "maxCharacters": 2,
+        "positions": ["left", "right"],
+        "rules": "Lance une enquête pour trouver des preuves contre un personnage"
+      }
+    },
+    {
+      "id": "tv",
+      "label": "Plateau TV",
+      "type": "location",
+      "slots": {
+        "maxCharacters": 1,
+        "rules": "Le Plateau TV permet de confronter deux personnages"
+      }
+    },
+    {
+      "id": "tribunal",
+      "label": "Tribunal",
+      "type": "location",
+      "slots": {
+        "maxCharacters": 1,
+        "rules": "Au tribunal, un personnage peut être condamné"
+      }
+    }
+  ],
+  "victoryStates": [
+    {
+      "cell-1": { "location": "parlementeurope", "characters": [{ "id": "lepen" }] },
+      "cell-2": {
+        "location": "enquete",
+        "characters": [
+          { "id": "lepen", "position": "right" },
+          { "id": "mediapart", "position": "left" }
+        ]
+      },
+      "cell-3": { "location": "tv", "characters": [{ "id": "mediapart" }] },
+      "cell-4": { "location": "tribunal", "characters": [{ "id": "lepen" }] }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "level_storyteller_11",
+  "shortTitle": "Ministres Intermédiaire",
+  "title": "Mets les ministres dans l'ordre meme ceux qui l'on été 2 semaines",
+  "cells": 6,
+  "cardsCaracter": [
+    { "id": "macron", "label": "Macron", "type": "character" },
+    { "id": "borne", "label": "Borne", "type": "character" },
+    { "id": "attal", "label": "Attal", "type": "character" },
+    { "id": "barnier", "label": "Barnier", "type": "character" },
+    { "id": "ministre", "label": "Bayrou", "type": "character" }
+  ],
+  "cardsPlace": [
+    {
+      "id": "nomination",
+      "label": "Nomination démocratique 🤡",
+      "type": "location",
+      "slots": {
+        "maxCharacters": 1,
+        "rules": "Evince un personnage du gouvernement"
+      }
+    }
+  ],
+  "victoryStates": []
+}

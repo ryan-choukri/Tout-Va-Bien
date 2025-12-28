@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+import { GoogleAnalytics } from '@/components/Analytics/GoogleAnalytics';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -23,6 +24,9 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
 };
+
+const googleAnalyticsId = process.env.GOOGLE_ANALYTICS_ID;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,7 +34,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <GoogleAnalytics measurementId={googleAnalyticsId || ''} />
+        {children}
+      </body>
     </html>
   );
 }

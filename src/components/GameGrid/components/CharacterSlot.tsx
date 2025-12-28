@@ -3,6 +3,11 @@ import { useDroppable } from '@dnd-kit/core';
 import { CharacterCard } from './CharacterCard';
 import { DisplayCardImg } from './DisplayCardImg';
 
+const trad = {
+  left: 'De',
+  right: 'Pour',
+};
+
 export function CharacterSlot({
   type,
   level,
@@ -56,7 +61,7 @@ export function CharacterSlot({
           )} */}
         </CharacterCard>
       ) : (
-        <span className="text-xs text-gray-500 capitalize">{position}</span>
+        <span className="text-xs text-gray-500 capitalize">{trad[position] || position}</span>
       )}
     </div>
   );
