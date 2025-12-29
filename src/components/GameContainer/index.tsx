@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Level } from '../types';
 import { DisplayCardImg } from '@/components/GameGrid/components/DisplayCardImg';
 import { useState, useEffect } from 'react';
-import { log } from 'console';
 // Charge ton GameGrid dynamiquement
 const GameGrid = dynamic(() => import('@/components/GameGrid'), { ssr: false });
 
@@ -117,8 +116,8 @@ export default function GameContainer({
     message: string;
     type: 'success' | 'error';
   }>({ show: false, message: '', type: 'success' });
-  const [devMode, setDevMode] = useState<boolean>(false);
-  const [communityLevels, setCommunityLevels] = useState<Level[]>([]);
+  const [, setDevMode] = useState<boolean>(false);
+  const [, setCommunityLevels] = useState<Level[]>([]);
   const [allLevels, setAllLevels] = useState<Level[]>(levels);
   const [sarkoClickCount, setSarkoClickCount] = useState<number>(0);
   const [clickTimeout, setClickTimeout] = useState<NodeJS.Timeout | null>(null);
@@ -234,6 +233,9 @@ export default function GameContainer({
       setIsSubmitting(false);
     }
   };
+
+  console.log(levelContainerData);
+
   return (
     <div
       className={`from-gray-850 game-container relative flex flex-col rounded-xl shadow-lg ${

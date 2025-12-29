@@ -26,6 +26,7 @@ export type Level = {
   cardsCaracter: Card[];
   cardsPlace: Card[];
   victoryStates: BoardState[];
+  isUserCreated?: boolean;
 };
 
 export type DebugJSONProps = {

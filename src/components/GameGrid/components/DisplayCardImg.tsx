@@ -18,7 +18,11 @@ export function DisplayCardImg({
 }): JSX.Element | null {
   return card && card.type === 'character' ? (
     <>
-      <div style={style ? style : { bottom: '0px' }} className="absolute mb-2" onClick={onClick}>
+      <div
+        style={style ? style : { bottom: '0px' }}
+        className="absolute mb-2"
+        onClick={onClick}
+        data-testid={`display-card-${card.id}`}>
         {/* <Image
           src={`/characters/${card.id}.png`}
           alt={'Character Image'}
@@ -42,7 +46,8 @@ export function DisplayCardImg({
       <div
         className="absolute"
         style={style ? style : { zIndex: -8, bottom: '-8px', left: '-4px' }}
-        onClick={onClick}>
+        onClick={onClick}
+        data-testid={card ? `display-card-${card.id}` : 'display-card-location'}>
         {/* <Sprite id={'card'} size={{ height: 54, width: 97 }} className="absolute" /> */}
         <Image src={`/characters/card.png`} alt={'Location Image'} width={190} height={190} />
       </div>

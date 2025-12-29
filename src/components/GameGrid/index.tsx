@@ -288,7 +288,7 @@ export default function GameGrid({
   const level: Level = levelData;
   const [boardState, setBoardState] = useState<BoardState>({});
   const [initialBoardState] = useState<BoardState>({});
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const [, setActiveId] = useState<string | null>(null);
   //SET showDebug defaut value link to the envoironnement variable
   //process.env if its in prod or dev
 
@@ -300,6 +300,11 @@ export default function GameGrid({
   } | null>(null);
 
   const [customTitle, setCustomTitle] = useState<string>(level.title);
+  useEffect(() => {
+    if (level.isUserCreated) {
+      setBoardState(level.victoryStates[0] || {});
+    }
+  }, [level.isUserCreated, level.victoryStates]);
 
   // Detect board state changes
   useEffect(() => {
@@ -364,7 +369,7 @@ export default function GameGrid({
     // Get card ID from data instead of parsing the instance ID
     const cardId = active.data.current?.cardId;
     const sourceCellId = active.data.current?.cellId;
-    const draggedPosition = active.data.current?.position;
+    // const draggedPosition = active.data.current?.position;
 
     if (!cardId) {
       console.log('⛔ No cardId found in drag data');
@@ -423,13 +428,11 @@ export default function GameGrid({
       });
       //get the full deck of cards to know the maximum of positions possible
       const nbOfCharForVictory = Object.entries(level.victoryStates[0])
-        .map(([key, val]) => 1)
+        .map(() => 1)
         .reduce((a, b) => a + b, 0);
 
       const nbOfLocationForVictory = Object.entries(level.victoryStates[0]).length;
       const maxOfPos = nbOfCharForVictory + nbOfLocationForVictory;
-      console.log('Max of positions possible: ' + maxOfPos);
-      console.log(totalOfGoodPos);
       const nbOferrors = maxOfPos - totalOfGoodPos[0];
       setVictoryState({ achieved: false, index: undefined, nbOferrors });
     }

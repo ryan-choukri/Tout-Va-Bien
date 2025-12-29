@@ -323,7 +323,7 @@ describe('GameContainer Component', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText((content, element) => content.includes("Échec de l'envoi du niveau"))
+          screen.getByText((content) => content.includes("Échec de l'envoi du niveau"))
         ).toBeInTheDocument();
       });
     });
@@ -341,9 +341,7 @@ describe('GameContainer Component', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText((content, element) =>
-            content.includes("Erreur lors de l'envoi du niveau")
-          )
+          screen.getByText((content) => content.includes("Erreur lors de l'envoi du niveau"))
         ).toBeInTheDocument();
       });
     });
