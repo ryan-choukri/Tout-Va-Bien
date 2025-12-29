@@ -104,7 +104,7 @@ export const Sidebar = ({
               <button
                 onClick={() => onSelectLevel(level, index)}
                 title={sidebarCollapsed ? level.shortTitle : undefined}
-                className={`relative flex cursor-pointer items-center ${sidebarCollapsed ? 'justify-center gap-0 px-3' : 'justify-start gap-3 pr-2 pl-3'} min-h-[3rem] rounded-lg py-2.5 text-sm font-medium transition-all duration-200 ease-out ${
+                className={`relative flex cursor-pointer items-center ${sidebarCollapsed ? 'justify-center gap-0 px-3' : 'w-full justify-start gap-3 pr-2 pl-3'} py-0.3 min-h-[2.5rem] rounded-lg text-xs font-medium transition-all duration-200 ease-out ${
                   isActive
                     ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-lg shadow-indigo-500/25'
                     : isCreateLevel
