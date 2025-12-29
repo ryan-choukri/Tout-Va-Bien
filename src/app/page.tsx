@@ -8,7 +8,7 @@ import { Level } from '@/components/types';
 import { Sidebar } from '@/components/Sidebar';
 
 // Charge ton GameGrid dynamiquement
-const GameGrid = dynamic(() => import('@/components/GameGrid'), { ssr: false });
+const GameContainer = dynamic(() => import('@/components/GameContainer'), { ssr: false });
 
 // Exemple de niveaux
 import level1 from '@/data/levels/level1.json';
@@ -22,6 +22,7 @@ import level8 from '@/data/levels/level8.json';
 import level9 from '@/data/levels/level9.json';
 import level10 from '@/data/levels/level10.json';
 import level11 from '@/data/levels/level11.json';
+import levelcreate from '@/data/levels/levelcreate.json';
 const levels = [
   level1,
   level2,
@@ -34,24 +35,35 @@ const levels = [
   level9,
   level10,
   level11,
+  levelcreate,
 ];
 
 export default function Home() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const levelIndex = useMemo(() => {
-    const levelParam = searchParams.get('level');
-    const parsed = levelParam ? parseInt(levelParam, 10) - 1 : 0;
-    return Number.isFinite(parsed) && parsed >= 0 && parsed < levels.length ? parsed : 0;
-  }, [searchParams]);
+  const levelParam = searchParams.get('level');
+  const isHome = !levelParam || levelParam === 'home';
+  const isCreate = levelParam === 'create';
 
-  const currentLevel = levels[levelIndex];
+  // State declarations must come first
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [showDebug, setShowDebug] = useState<boolean>(
     process.env.NEXT_PUBLIC_SHOW_DEBUG === 'true' ? true : false
   );
   const [showRotateHint, setShowRotateHint] = useState(false);
+  const [devMode, setDevMode] = useState<boolean>(false);
+  const [allLevels, setAllLevels] = useState<Level[]>(levels as Level[]);
+  const [communityLevelsCount, setCommunityLevelsCount] = useState<number>(0);
+
+  const levelIndex = useMemo(() => {
+    if (isHome) return -1;
+    if (isCreate) return allLevels.length - 1; // Return index of levelcreate (last item in array)
+    const parsed = levelParam ? parseInt(levelParam, 10) - 1 : -1;
+    return Number.isFinite(parsed) && parsed >= 0 && parsed < allLevels.length ? parsed : -1;
+  }, [levelParam, isHome, isCreate, allLevels]);
+
+  const currentLevel = levelIndex >= 0 ? allLevels[levelIndex] : null;
 
   useEffect(() => {
     const checkOrientation = () => {
@@ -88,11 +100,28 @@ export default function Home() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handleSelectLevel = (_level: Level, index: number) => {
+  const handleSelectLevel = (level: Level, index: number) => {
     const params = new URLSearchParams(Array.from(searchParams.entries()));
-    params.set('level', String(index + 1));
+
+    // Exception for create level (detected by ID)
+    if (level.id === 'level_storyteller_0create') {
+      params.set('level', 'create');
+    } else {
+      params.set('level', String(index + 1));
+    }
+
     const query = params.toString();
     router.replace(query ? `/?${query}` : '/', { scroll: false });
+  };
+
+  const handleDevModeChange = (
+    newDevMode: boolean,
+    communityLevels: Level[],
+    newAllLevels: Level[]
+  ) => {
+    setDevMode(newDevMode);
+    setAllLevels(newAllLevels);
+    setCommunityLevelsCount(communityLevels.length);
   };
 
   return (
@@ -104,21 +133,26 @@ export default function Home() {
       </button>
 
       <Sidebar
-        levels={levels as Level[]}
+        levels={allLevels as Level[]}
         currentLevel={currentLevel as Level}
         sidebarCollapsed={sidebarCollapsed}
         onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
         onSelectLevel={handleSelectLevel}
+        isHome={isHome}
+        devMode={devMode}
+        communityLevelsCount={communityLevelsCount}
       />
 
       {/* Container du jeu */}
       <div className={showRotateHint ? 'pointer-events-none blur-sm' : ''}>
         <main className="mx-auto flex max-w-[650px] flex-1 flex-col items-center">
-          <GameGrid
+          <GameContainer
             showDebug={showDebug}
             levels={levels as Level[]}
-            key={currentLevel.id}
             levelData={currentLevel as Level}
+            isHome={isHome}
+            isCreate={isCreate}
+            onDevModeChange={handleDevModeChange}
           />
         </main>
       </div>

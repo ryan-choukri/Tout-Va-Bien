@@ -52,18 +52,12 @@ export function Sprite({ id, size = { height: 81, width: 81 } }: CharacterSprite
   const key = id.endsWith('.png') ? id : `${id}.png`;
   const sprite = atlas.frames[key];
 
-  console.log('spriteAtlas.frames', atlas.frames);
-  console.log('Looking for sprite:', key);
-  console.log('Found sprite:', sprite);
-
   // if (!sprite) {
   //   console.warn(`Sprite not found for id: ${id} (looked for: ${key})`);
   //   return null;
   // }
 
   const scale = sprite ? size.width / sprite.frame.w : 0;
-  console.log('sprite', sprite);
-  console.log(!sprite);
 
   return (
     <>

@@ -17,7 +17,7 @@ import { DisplayCardImg } from './components/DisplayCardImg';
 import { BoardCell } from './components/BoardCell';
 import { DeckCard } from './components/DeckCard';
 import { DebugJSON } from './components/DebugJSON';
-import { useState, JSX } from 'react';
+import { useState, useEffect } from 'react';
 // import levelData from "@/data/levels/level2.json";
 
 import {
@@ -272,13 +272,22 @@ export default function GameGrid({
   showDebug,
   levels,
   levelData,
+  isCreate,
+  onProposerClick,
+  onBoardStateChange,
+  hasChanges,
 }: {
-  showDebug: boolean;
+  showDebug?: boolean;
   levels: Level[];
   levelData: Level;
+  isCreate?: boolean;
+  onProposerClick?: (title: string, boardState: Level) => void;
+  onBoardStateChange?: (hasChanges: boolean) => void;
+  hasChanges?: boolean;
 }) {
   const level: Level = levelData;
   const [boardState, setBoardState] = useState<BoardState>({});
+  const [initialBoardState] = useState<BoardState>({});
   const [activeId, setActiveId] = useState<string | null>(null);
   //SET showDebug defaut value link to the envoironnement variable
   //process.env if its in prod or dev
@@ -289,6 +298,14 @@ export default function GameGrid({
     label: string;
     cellData?: BoardState[string]; // Add this
   } | null>(null);
+
+  const [customTitle, setCustomTitle] = useState<string>(level.title);
+
+  // Detect board state changes
+  useEffect(() => {
+    const hasChanges = JSON.stringify(boardState) !== JSON.stringify(initialBoardState);
+    onBoardStateChange?.(hasChanges);
+  }, [boardState, initialBoardState, onBoardStateChange]);
 
   const [victoryState, setVictoryState] = useState<VictoryStatus>({
     achieved: false,
@@ -595,10 +612,37 @@ export default function GameGrid({
 
   return (
     <>
-      <div
-        className={`game-container flex flex-col rounded-xl shadow-lg ${victoryState.achieved ? 'victory-game' : ''}`}>
+      <div className={`${victoryState.achieved ? 'victory-game' : ''}`}>
         <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
-          <h2 className="mx-4 mt-3 text-center text-sm text-white">{level.title}</h2>
+          {isCreate ? (
+            <div className="mx-4 mt-3 flex items-center gap-2">
+              <textarea
+                value={customTitle}
+                onChange={(e) => setCustomTitle(e.target.value)}
+                className="flex-1 resize-none rounded border border-gray-600 bg-gray-700/50 p-1 text-xs text-white"
+                placeholder="Titre de votre niveau..."
+                rows={1}
+              />
+              <button
+                onClick={() =>
+                  onProposerClick?.(customTitle, {
+                    ...level,
+                    title: customTitle,
+                    victoryStates: [boardState],
+                  })
+                }
+                disabled={!hasChanges}
+                className={`cursor-pointer rounded px-3 py-1 text-xs font-medium text-white transition-all duration-200 ${
+                  hasChanges
+                    ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700'
+                    : 'cursor-not-allowed bg-gray-600 opacity-50'
+                }`}>
+                PROPOSER
+              </button>
+            </div>
+          ) : (
+            <h2 className="mx-4 mt-3 text-center text-sm text-white">{level.title}</h2>
+          )}
           {/* DISPLAY HERE IN ABOSULTE THE nbOferrors */}
           <div className="absolute top-1">
             {victoryState.achieved ? (
@@ -644,7 +688,7 @@ export default function GameGrid({
                         Place une scène ici
                         <br />
                         {index === boardCells.length - 1 && (
-                          <span className="!text-[10px]">
+                          <span className="text-[10px]!">
                             (Glisse les cartes pour resoudre l&apos;histoire !)
                           </span>
                         )}
