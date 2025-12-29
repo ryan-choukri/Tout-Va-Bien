@@ -259,7 +259,7 @@ export default function GameContainer({
       {/* Confirmation Popup */}
       {showConfirmPopup && (
         <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60">
-          <div className="mx-4 max-w-md rounded-lg border border-gray-600 bg-gradient-to-b from-gray-800 to-gray-900 p-6 shadow-xl">
+          <div className="mx-4 max-w-md rounded-lg bg-gradient-to-br from-blue-900 to-gray-900 p-6 shadow-sm">
             <h3 className="mb-4 text-center text-lg font-semibold text-white">Confirmation</h3>
             <p className="mb-6 text-center text-sm text-gray-300">
               Êtes-vous sûr de vouloir envoyer ce niveau ? S&apos;il est sélectionné, il sera en

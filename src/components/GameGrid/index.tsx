@@ -427,11 +427,11 @@ export default function GameGrid({
           .reduce((a, b) => a + b, 0);
       });
       //get the full deck of cards to know the maximum of positions possible
-      const nbOfCharForVictory = Object.entries(level.victoryStates[0])
+      const nbOfCharForVictory = Object.entries(level.victoryStates[0] || {})
         .map(() => 1)
         .reduce((a, b) => a + b, 0);
 
-      const nbOfLocationForVictory = Object.entries(level.victoryStates[0]).length;
+      const nbOfLocationForVictory = Object.entries(level.victoryStates[0] || {}).length;
       const maxOfPos = nbOfCharForVictory + nbOfLocationForVictory;
       const nbOferrors = maxOfPos - totalOfGoodPos[0];
       setVictoryState({ achieved: false, index: undefined, nbOferrors });

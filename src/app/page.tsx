@@ -67,6 +67,8 @@ export default function Home() {
 
   useEffect(() => {
     const checkOrientation = () => {
+      if (typeof window === 'undefined') return;
+
       const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
       const isPortrait = window.innerHeight > window.innerWidth;
 
@@ -82,8 +84,10 @@ export default function Home() {
   // Collapse sidebar on mobile/small screens
   useEffect(() => {
     const handleResize = () => {
+      if (typeof window === 'undefined') return;
+
       // CHECK if my app is running on mobile but not by the size
-      const isMobileLike = typeof window !== 'undefined' && navigator.maxTouchPoints > 0;
+      const isMobileLike = navigator.maxTouchPoints > 0;
 
       if (isMobileLike) {
         setSidebarCollapsed(true);
