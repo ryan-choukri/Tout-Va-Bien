@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 
 import { Level } from '@/components/types';
 import { Sidebar } from '@/components/Sidebar';
@@ -38,7 +38,7 @@ const levels = [
   levelcreate,
 ];
 
-export default function Home() {
+function HomeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -179,5 +179,18 @@ export default function Home() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-screen items-center justify-center bg-gray-950 text-white">
+          Loading...
+        </div>
+      }>
+      <HomeContent />
+    </Suspense>
   );
 }
