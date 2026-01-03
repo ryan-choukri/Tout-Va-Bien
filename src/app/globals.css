@@ -38,8 +38,10 @@ body {
 /* game-container is the main wrapper for the game grid and elements */
 .game-container {
   width: 100% !important;
-  background-color: #18181b; /* zinc-900 */
-  color: #e4e4e7; /* zinc-200 */
+  background-image: url('/textures/wall.png');
+  background-size: cover;
+  background-color: #18181b;
+  color: #e4e4e7;
   border-radius: 1rem;
   font-family: monospace;
 }
@@ -98,21 +100,30 @@ body {
   /* box-shadow:-1px 2px 4px 2px #31313154; */
 }
 
-/* bord-cells and hover-bord-cells are the styles for the cells on the board */
+/* bord-cells and hover-bord-cells are the styles for the cells on the board 27272a10 */
 .bord-cells {
-  background-color: #27272a; /* zinc-800 */
-  color: #d4d4d8; /* zinc-300 */
-}
-
-.hover-bord-cells {
-  background-color: #3f3f46; /* zinc-700 */
-  color: #fafafa; /* zinc-50 */
+  background-color: rgba(0, 0, 0, 0.3); /* zinc-800 */
+  border: 2px solid rgba(0, 0, 0, 0.33); /* white with 10% opacity */
+  /* box-shadow: 2px 4px 6px rgba(0, 0, 0, 025); */
+  box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.237);
 }
 
 /* deck is the style for the deck container */
 .deck {
   /* background-color: #27272a; */
   color: #d4d4d8; /* zinc-300 */
+}
+
+.game-header {
+  background-image: url('/textures/headeers.png');
+  background-position: center 0px;
+  background-size: 96%;
+  background-repeat: no-repeat;
+}
+
+.game-title {
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+  font-weight: 600;
 }
 
 .game-container {

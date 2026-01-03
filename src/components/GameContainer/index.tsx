@@ -44,7 +44,7 @@ const HomeScreen = ({ onSarkoClick }: { onSarkoClick?: () => void }) => {
         {/* Left: Title & Subtitle */}
 
         <div className="flex flex-col tracking-tighter">
-          <h1 className="bg-gradient-to-tr from-rose-400 to-pink-800 bg-clip-text text-3xl font-extrabold text-transparent">
+          <h1 className="bg-gradient-to-tr from-rose-400 to-pink-500 bg-clip-text text-3xl font-extrabold text-transparent text-shadow-lg">
             Tout va bien !
           </h1>
           <p className="mt-2 text-center text-xs text-gray-400">Le jeu de puzzle politique</p>
@@ -67,7 +67,7 @@ const HomeScreen = ({ onSarkoClick }: { onSarkoClick?: () => void }) => {
       </div>
 
       {/* Description */}
-      <p className="mt-4 mb-4 max-w-[400px] text-center text-xs leading-relaxed text-gray-300">
+      <p className="mt-4 mb-4 max-w-[400px] text-center text-xs leading-relaxed text-white text-shadow-lg">
         Place les personnages aux bons endroits pour résoudre les puzzles politiques et découvrir
         comment tout va bien... ou pas !
       </p>

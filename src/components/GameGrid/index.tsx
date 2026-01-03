@@ -617,35 +617,39 @@ export default function GameGrid({
     <>
       <div className={`${victoryState.achieved ? 'victory-game' : ''}`}>
         <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
-          {isCreate ? (
-            <div className="mx-4 mt-3 flex items-center gap-2">
-              <textarea
-                value={customTitle}
-                onChange={(e) => setCustomTitle(e.target.value)}
-                className="flex-1 resize-none rounded border border-gray-600 bg-gray-700/50 p-1 text-xs text-white"
-                placeholder="Titre de votre niveau..."
-                rows={1}
-              />
-              <button
-                onClick={() =>
-                  onProposerClick?.(customTitle, {
-                    ...level,
-                    title: customTitle,
-                    victoryStates: [boardState],
-                  })
-                }
-                disabled={!hasChanges}
-                className={`cursor-pointer rounded px-3 py-1 text-xs font-medium text-white transition-all duration-200 ${
-                  hasChanges
-                    ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700'
-                    : 'cursor-not-allowed bg-gray-600 opacity-50'
-                }`}>
-                PROPOSER
-              </button>
-            </div>
-          ) : (
-            <h2 className="mx-4 mt-3 text-center text-sm text-white">{level.title}</h2>
-          )}
+          <div className="game-header px-4 pt-3 pb-2">
+            {isCreate ? (
+              <div className="flex items-center gap-2">
+                <textarea
+                  value={customTitle}
+                  onChange={(e) => setCustomTitle(e.target.value)}
+                  className="flex-1 resize-none rounded border border-gray-600 bg-gray-700/50 p-1 text-xs text-white"
+                  placeholder="Titre de votre niveau..."
+                  rows={1}
+                />
+                <button
+                  onClick={() =>
+                    onProposerClick?.(customTitle, {
+                      ...level,
+                      title: customTitle,
+                      victoryStates: [boardState],
+                    })
+                  }
+                  disabled={!hasChanges}
+                  className={`cursor-pointer rounded px-3 py-1 text-xs font-medium text-white transition-all duration-200 ${
+                    hasChanges
+                      ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700'
+                      : 'cursor-not-allowed bg-gray-600 opacity-50'
+                  }`}>
+                  PROPOSER
+                </button>
+              </div>
+            ) : (
+              <h2 className="game-title mb- mt-1 px-4 text-center text-sm text-white">
+                {level.title}
+              </h2>
+            )}
+          </div>
           {/* DISPLAY HERE IN ABOSULTE THE nbOferrors */}
           <div className="absolute top-1">
             {victoryState.achieved ? (
@@ -686,7 +690,7 @@ export default function GameGrid({
                       />
                     </LocationCard>
                   ) : (
-                    <div className="flex h-full w-full flex-col items-center justify-center text-center text-xs text-gray-400">
+                    <div className="flex h-full w-full flex-col items-center justify-center text-center text-xs">
                       <span>
                         Place une scène ici
                         <br />
